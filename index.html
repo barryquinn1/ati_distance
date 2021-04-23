@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Algorithmic trading and investment</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Barry Quinn" />
+    <link href="index_files/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <script src="index_files/xaringanExtra-webcam-0.0.1/webcam.js"></script>
+    <script id="xaringanExtra-webcam-options" type="application/json">{"width":"200","height":"200","margin":"1em"}</script>
+    <link href="index_files/panelset-0.2.4/panelset.css" rel="stylesheet" />
+    <script src="index_files/panelset-0.2.4/panelset.js"></script>
+    <link href="index_files/tile-view-0.2.4/tile-view.css" rel="stylesheet" />
+    <script src="index_files/tile-view-0.2.4/tile-view.js"></script>
+    <link href="index_files/xaringanExtra-extra-styles-0.2.4/xaringanExtra-extra-styles.css" rel="stylesheet" />
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } },
+      });
+    </script>
+    <style>
+    .mjx-mrow a {
+      color: black;
+      pointer-events: none;
+      cursor: default;
+    }
+    </style>
+    <link rel="stylesheet" href="fonts.css" type="text/css" />
+    <link rel="stylesheet" href="mycssblend.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Algorithmic trading and investment
+## Distance metrics
+### Barry Quinn
+### 20/12/2019 (updated 2021-04-23)
+
+---
+
+
+
+layout: true
+  
+&lt;div class="my-footer"&gt;&lt;span&gt;quinference.com&lt;/span&gt;&lt;/div&gt;
+
+---
+class:inverse
+## Outline
+
+.salt[
+- Distance metrics
+  - Correlation based distance metrics
+- Shannon's entropy
+  - Marginal, conditional, joint
+- Experimental evidence
+- Financial problem investigation
+]
+
+---
+class:inverse
+# Why study distance metrics?
+- So far we have studied the important numerical properties of the empirical correlation (and by extension, covariance) matrix. 
+
+- Despite all of its virtues, correlation suffers from some critical limitations as a measure of codependence. 
+
+- In this lecture, we overcome those limitations by reviewing information theory concepts that underlie many modern marvels
+- .blue[.bold[Internet, mobile phones, file compression, video streaming, and encryption]]
+
+- None of these inventions would have been possible if researchers had not looked beyond correlations to understand codependency.
+
+---
+class:center, middle
+## Claude Shannon's Entropy
+
+.saltinline[
+- As it turns out, information theory in general, and the concept of Shannon’s entropy in particular, also have useful applications in finance. 
+
+- The key idea behind entropy is to quantify the amount of uncertainty associated with a random variable. 
+
+- Information theory is also essential to ML, because the primary goal of many ML algorithms is to reduce the amount of uncertainty involved in the solution to a problem. 
+]
+---
+class:middle
+## Learning outcomes
+
+.font150[
+- we will review concepts that are used throughout ML in a variety of settings, 
+.purple[
+1. defining the objective function in decision tree learning 
+2. defining the loss function for classification problems 
+3. evaluating the distance between two random variables
+4. comparing clusters
+5. feature selection.
+]
+]
+
+---
+class:middle
+# What are the desirable properties of a metric
+- In mathematical a **metric** has some important properties that dictate its usefulness.
+- While in day to day use the word metric has a loose meaning of measurement, in mathematical it has very precise definition.
+- The axioms of a metric are 
+1. .font90[.red[nonnegativity]]
+`$$f(.)\geq 0$$`
+2. .font90[.red[symmetry]]  
+`$$f(X,Y)=f(Y,X)$$`
+
+3. .font90[.red[triangle inequality]] 
+`$$f(X,Z) \leq f(X,Y) + F(Y,Z)$$`
+---
+class:middle
+# A correlation-based metric
+- Correlation is a useful measure of linear codependence. 
+- Once a correlation matrix has been denoised and detoned, it can reveal important structural information about a system. 
+
+- For example, we could use correlations to identify clusters of highly interrelated securities. 
+- But before we can do that, we need to address a technical problem 
+.blockquote[
+### &lt;svg style="height:0.8em;top:.04em;position:relative;" viewBox="0 0 512 512"&gt;&lt;path d="M256 32C114.6 32 0 125.1 0 240c0 49.6 21.4 95 57 130.7C44.5 421.1 2.7 466 2.2 466.5c-2.2 2.3-2.8 5.7-1.5 8.7S4.8 480 8 480c66.3 0 116-31.8 140.6-51.4 32.7 12.3 69 19.4 107.4 19.4 141.4 0 256-93.1 256-208S397.4 32 256 32zM128 272c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32zm128 0c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32zm128 0c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32z"/&gt;&lt;/svg&gt; Statistical thinking
+- correlation is not a metric, because it does not satisfy nonnegativity and triangle inequality conditions.
+]
+---
+class:inverse
+# Why are metrics important ?
+
+- Metrics are important because they induce an intuitive topology on a set. 
+- Without that intuitive topology, comparing non-metric measurements of codependence can lead to rather incoherent outcomes. 
+
+.blockquote[
+### &lt;svg style="height:0.8em;top:.04em;position:relative;" viewBox="0 0 512 512"&gt;&lt;path d="M256 32C114.6 32 0 125.1 0 240c0 49.6 21.4 95 57 130.7C44.5 421.1 2.7 466 2.2 466.5c-2.2 2.3-2.8 5.7-1.5 8.7S4.8 480 8 480c66.3 0 116-31.8 140.6-51.4 32.7 12.3 69 19.4 107.4 19.4 141.4 0 256-93.1 256-208S397.4 32 256 32zM128 272c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32zm128 0c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32zm128 0c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32z"/&gt;&lt;/svg&gt; Statistical thinking
+- For instance, the difference between correlations (0.9,1.0) is the same as (0.1,0.2), even though the former involves a greater difference in terms of codependence.
+]
+
+---
+class: middle
+# Constructing a correlation based metric
+
+- Consider two random vectors X, Y of size T, and a correlation estimate `\(\rho\left(X,Y \right)\)`, with the only requirement that `\(\sigma\left(X,Y \right)=\rho\left(X,Y \right)\sigma\left(X \right)\sigma\left(Y \right)\)`
+
+- `\(\sigma\left(X,Y \right)\)` is the covariance between the two vectors
+- `\(\sigma\left(..\right)\)` is the standard deviation. 
+
+- Pearson’s correlation is one of several correlation estimates that
+satisfy these requirements. 
+
+---
+class:middle
+# Constructing a correlation based metric
+.pull-left[
+![](https://i.redd.it/vm8o72zn9u951.jpg)
+]
+
+.pull-right[
+.blockquote[
+### &lt;svg style="height:0.8em;top:.04em;position:relative;" viewBox="0 0 512 512"&gt;&lt;path d="M256 32C114.6 32 0 125.1 0 240c0 49.6 21.4 95 57 130.7C44.5 421.1 2.7 466 2.2 466.5c-2.2 2.3-2.8 5.7-1.5 8.7S4.8 480 8 480c66.3 0 116-31.8 140.6-51.4 32.7 12.3 69 19.4 107.4 19.4 141.4 0 256-93.1 256-208S397.4 32 256 32zM128 272c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32zm128 0c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32zm128 0c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32z"/&gt;&lt;/svg&gt; Statistical thinking
+- Then, the following can be considered a metric 
+`$$d_p\left(X,Y\right)=\sqrt{1/2\left(1- \rho\left(X,Y \right)\right)}$$`
+]
+]
+---
+class:middle
+## &lt;svg style="height:0.8em;top:.04em;position:relative;" viewBox="0 0 448 512"&gt;&lt;path d="M400 0H48C22.4 0 0 22.4 0 48v416c0 25.6 22.4 48 48 48h352c25.6 0 48-22.4 48-48V48c0-25.6-22.4-48-48-48zM128 435.2c0 6.4-6.4 12.8-12.8 12.8H76.8c-6.4 0-12.8-6.4-12.8-12.8v-38.4c0-6.4 6.4-12.8 12.8-12.8h38.4c6.4 0 12.8 6.4 12.8 12.8v38.4zm0-128c0 6.4-6.4 12.8-12.8 12.8H76.8c-6.4 0-12.8-6.4-12.8-12.8v-38.4c0-6.4 6.4-12.8 12.8-12.8h38.4c6.4 0 12.8 6.4 12.8 12.8v38.4zm128 128c0 6.4-6.4 12.8-12.8 12.8h-38.4c-6.4 0-12.8-6.4-12.8-12.8v-38.4c0-6.4 6.4-12.8 12.8-12.8h38.4c6.4 0 12.8 6.4 12.8 12.8v38.4zm0-128c0 6.4-6.4 12.8-12.8 12.8h-38.4c-6.4 0-12.8-6.4-12.8-12.8v-38.4c0-6.4 6.4-12.8 12.8-12.8h38.4c6.4 0 12.8 6.4 12.8 12.8v38.4zm128 128c0 6.4-6.4 12.8-12.8 12.8h-38.4c-6.4 0-12.8-6.4-12.8-12.8V268.8c0-6.4 6.4-12.8 12.8-12.8h38.4c6.4 0 12.8 6.4 12.8 12.8v166.4zm0-256c0 6.4-6.4 12.8-12.8 12.8H76.8c-6.4 0-12.8-6.4-12.8-12.8V76.8C64 70.4 70.4 64 76.8 64h294.4c6.4 0 12.8 6.4 12.8 12.8v102.4z"/&gt;&lt;/svg&gt; Proof
+.small[
+1. The Euclidean distance between two vectors is defined as 
+`$$d\left(X,Y\right)=\sqrt{\sum_{t=1}^{T}\left(X_t-Y_t\right)^2}$$`
+2. Z-standardise the vectors so that `\(x=\left(X-\bar{X}\right)/\sigma\left(X\right) \text{   , }y=\left(Y-\bar{Y}\right)/\sigma\left(Y\right)\)` where `\(\bar{.}\)` is the mean values
+  - This results in `\(\rho\left(x,y \right)=\rho\left(X,Y \right)\)`
+3. we derive the Euclidean distance `\(d[x,y]\)`:
+
+`\begin{align*}
+d\left(x,y\right) &amp; = \sqrt{\sum_{t=1}^{T}\left(x_t-y_t\right)^2} \\
+&amp; =\sqrt{\sum_{t=1}^{T}x_t^2 +\sum_{t=1}^{T}y_t^2 - 2\sum_{t=1}^{T}x_t^2y_t^2} = \sqrt{T+T=2T\sigma\left(x,y\right)} \\
+&amp; = \sqrt{2T\left(1-\underbrace{\rho\left(x,y\right)}_{=\rho\left(X,Y\right)}\right)}=\sqrt{4T}d+p(X,Y)
+\end{align*}`
+]
+
+- This implies that `\(d_p(X,Y)\)` is a linear multiple of the Euclidean distance between the vectors `\(\left\{X,Y \right\}\)`after z-standardization `\(d(x,y)\)`, 
+- Thus it inherits the true-metric properties of the Euclidean distance.
+
+---
+class:middle
+# Properties of metric `\(d_p(x,y)\)`
+.content-box-army[
+.white[
+1. It is normalised `\(d_p(X,Y) \in[0,1]\)`, because `\(\rho(X,Y) \in[-1,1]\)`
+2. It deems more distant two random variables with negative correlation than two random variables with positive correlation, regardless of their absolute value
+  * In finance, this property is very useful
+  * For example, we may wish to build a long-only portfolio, where holdings in negative-correlated securities can only offset risk, and therefore should be treated as different for diversification purposes.
+]
+]
+
+---
+class:middle
+### An alternative correlation-based distance metric `\(d_{|p|}(X,Y)\)`
+
+.blockquote[
+### &lt;svg style="height:0.8em;top:.04em;position:relative;" viewBox="0 0 512 512"&gt;&lt;path d="M444.52 3.52L28.74 195.42c-47.97 22.39-31.98 92.75 19.19 92.75h175.91v175.91c0 51.17 70.36 67.17 92.75 19.19l191.9-415.78c15.99-38.39-25.59-79.97-63.97-63.97z"/&gt;&lt;/svg&gt; Aim
+- In long-short portfolio, we often prefer to consider highly negatively correlated securities as similar, because the position sign can override the sign of the correlation. For that case, we can define an alternative normalized correlation-based distance metric
+]
+
+.blockquote[
+.large[
+### Metric &lt;svg style="height:0.8em;top:.04em;position:relative;fill:red;" viewBox="0 0 448 512"&gt;&lt;path d="M400 0H48C22.4 0 0 22.4 0 48v416c0 25.6 22.4 48 48 48h352c25.6 0 48-22.4 48-48V48c0-25.6-22.4-48-48-48zM128 435.2c0 6.4-6.4 12.8-12.8 12.8H76.8c-6.4 0-12.8-6.4-12.8-12.8v-38.4c0-6.4 6.4-12.8 12.8-12.8h38.4c6.4 0 12.8 6.4 12.8 12.8v38.4zm0-128c0 6.4-6.4 12.8-12.8 12.8H76.8c-6.4 0-12.8-6.4-12.8-12.8v-38.4c0-6.4 6.4-12.8 12.8-12.8h38.4c6.4 0 12.8 6.4 12.8 12.8v38.4zm128 128c0 6.4-6.4 12.8-12.8 12.8h-38.4c-6.4 0-12.8-6.4-12.8-12.8v-38.4c0-6.4 6.4-12.8 12.8-12.8h38.4c6.4 0 12.8 6.4 12.8 12.8v38.4zm0-128c0 6.4-6.4 12.8-12.8 12.8h-38.4c-6.4 0-12.8-6.4-12.8-12.8v-38.4c0-6.4 6.4-12.8 12.8-12.8h38.4c6.4 0 12.8 6.4 12.8 12.8v38.4zm128 128c0 6.4-6.4 12.8-12.8 12.8h-38.4c-6.4 0-12.8-6.4-12.8-12.8V268.8c0-6.4 6.4-12.8 12.8-12.8h38.4c6.4 0 12.8 6.4 12.8 12.8v166.4zm0-256c0 6.4-6.4 12.8-12.8 12.8H76.8c-6.4 0-12.8-6.4-12.8-12.8V76.8C64 70.4 70.4 64 76.8 64h294.4c6.4 0 12.8 6.4 12.8 12.8v102.4z"/&gt;&lt;/svg&gt; 
+`$$d_{|p|}=\sqrt{1-|\rho(X,Y)|}$$`
+]
+]
+
+---
+class:middle
+# Entropy: What is it?
+.pull-left[
+- .bold[.blue[Information entropy]] is Claude Shannon's contribution to how the world we live in functions
+- Consider the experience of fighting with tangled earphones
+- Cords and cables tend towards tying themselves in knots
+- WHY??
+]
+.pull-right[
+![](https://www.thesun.co.uk/wp-content/uploads/2019/09/NINTCHDBPICT000521630400.jpg)
+]
+---
+class:middle
+#Entropy Explained
+.blockquote[
+### &lt;svg style="height:0.8em;top:.04em;position:relative;" viewBox="0 0 512 512"&gt;&lt;path d="M256 32C114.6 32 0 125.1 0 240c0 49.6 21.4 95 57 130.7C44.5 421.1 2.7 466 2.2 466.5c-2.2 2.3-2.8 5.7-1.5 8.7S4.8 480 8 480c66.3 0 116-31.8 140.6-51.4 32.7 12.3 69 19.4 107.4 19.4 141.4 0 256-93.1 256-208S397.4 32 256 32zM128 272c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32zm128 0c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32zm128 0c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32z"/&gt;&lt;/svg&gt; Statistical thinking
+
+- There are vastly more ways for cords to end up in a knot than for them to remain untied.
+
+-  Raymer and Smith (2007) using **knot theory** explain that knots will appear with 100% probability beyond an optimal length of string, about a foot.
+
+- &lt;svg style="height:0.8em;top:.04em;position:relative;" viewBox="0 0 384 512"&gt;&lt;path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/&gt;&lt;/svg&gt;have used this math to attempt their earphones to be tangle-proof
+]
+---
+class:middle
+# Entropy explained
+
+- This is of course physics at work
+- At a descriptive level, the reason is .bold[.blue[Entropy]]
+.blockquote[
+### Thought experiment &lt;svg style="height:0.8em;top:.04em;position:relative;" viewBox="0 0 576 512"&gt;&lt;path d="M208 0c-29.9 0-54.7 20.5-61.8 48.2-.8 0-1.4-.2-2.2-.2-35.3 0-64 28.7-64 64 0 4.8.6 9.5 1.7 14C52.5 138 32 166.6 32 200c0 12.6 3.2 24.3 8.3 34.9C16.3 248.7 0 274.3 0 304c0 33.3 20.4 61.9 49.4 73.9-.9 4.6-1.4 9.3-1.4 14.1 0 39.8 32.2 72 72 72 4.1 0 8.1-.5 12-1.2 9.6 28.5 36.2 49.2 68 49.2 39.8 0 72-32.2 72-72V64c0-35.3-28.7-64-64-64zm368 304c0-29.7-16.3-55.3-40.3-69.1 5.2-10.6 8.3-22.3 8.3-34.9 0-33.4-20.5-62-49.7-74 1-4.5 1.7-9.2 1.7-14 0-35.3-28.7-64-64-64-.8 0-1.5.2-2.2.2C422.7 20.5 397.9 0 368 0c-35.3 0-64 28.6-64 64v376c0 39.8 32.2 72 72 72 31.8 0 58.4-20.7 68-49.2 3.9.7 7.9 1.2 12 1.2 39.8 0 72-32.2 72-72 0-4.8-.5-9.5-1.4-14.1 29-12 49.4-40.6 49.4-73.9z"/&gt;&lt;/svg&gt;
+- If you carefully lay a dozen earphones in a box and then seals the box and shake.
+ - We can pretty much guarantee that, knowing nothing about the physics of cords of knots, that the cords will be tangled.
+ - We just have to bet on Entropy
+ - .bold[.blue[Events that can happen vastly more ways are more likely]]
+]
+
+---
+class:middle
+## Exploiting entropy
+- Exploiting entropy is not going to untie the cords
+- But it will helps us solve problems that arise when we using the *conventional* correlation measure in quantitative finance.
+- The notion of correlation presents three important caveats. 
+1. It quantifies the .bold[linear codependency] between two random variables but it neglects .bold[nonlinear] relationships. 
+
+2. Correlation is highly influenced by outliers. 
+
+3. Its application beyond the multivariate Normal case is questionable.     - We may compute the correlation between any two real variables, however that correlation is typically meaningless unless the two variables follow a bivariate Normal distribution. 
+
+- .bold[.red[To overcome these caveats, we need to introduce a few information-theoretic concepts.]]
+
+---
+class:middle
+## Entropy and the challenge of accuracy
+
+- To measure distance from perfect accuracy we require a measurement scale.
+- .blue[Information theory] provides a natural measurement scale for distance between two probability distributions.
+- Second we need to establish .blue[deviance] as an approximation of relative distance from perfect accuracy.
+- The basics of information theory tells us that a good measure of uncertainty (or accuracy) should satisfy three properties
+---
+class:middle
+## Desirable properties of good uncertainty measure
+
+1. .font110[the measure should be continuous]
+  * .font60[If it were not, then an arbitrarily small change in any of the probabilities, for example the probability of rain, would result in a massive change in uncertainty.]
+2. .font110[It should increase as the number of possible events increases]
+  * .font60[For example, suppose there are two cities that need weather forecasts. In the first city, it rains on half of the days in the year and is sunny on the others. In the second, it rains, shines, and hails, each on 1 out of every 3 days in the year. We’d like our measure of uncertainty to be larger in the second city, where there is one more kind of event to predict.]
+3. .font110[It should be additive]
+  * .font60[What this means is that if we first measure the uncertainty about rain or shine (2 possible events) and then the uncertainty about hot or cold (2 different possible events), the uncertainty over the four combinations of these events—rain/hot, rain/cold, shine/hot, shine/cold—should be the sum of the separate uncertainties.]
+
+---
+class:middle
+## Information entropy
+The one function that satisfies these three properties is called .bold[.blue[INFORMATION ENTROPY]], and it has a surprisingly simple definition.
+
+.blockquote[
+.font80[
+### &lt;svg style="height:0.8em;top:.04em;position:relative;" viewBox="0 0 512 512"&gt;&lt;path d="M256 32C114.6 32 0 125.1 0 240c0 49.6 21.4 95 57 130.7C44.5 421.1 2.7 466 2.2 466.5c-2.2 2.3-2.8 5.7-1.5 8.7S4.8 480 8 480c66.3 0 116-31.8 140.6-51.4 32.7 12.3 69 19.4 107.4 19.4 141.4 0 256-93.1 256-208S397.4 32 256 32zM128 272c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32zm128 0c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32zm128 0c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32z"/&gt;&lt;/svg&gt; Statistical thinking
+* If there are n different possible events and each event i has probability `\(p_i\)`, and we call the list of probabilities `\(p\)` then the unique measure of uncertainty we seek is :
+
+`\begin{align*}
+H\left(p\right)=-E(log(p_i))= -\sum_{i=1}^{n} p_i log(p_i)
+\end{align*}`
+
+* In plain words *the uncertainty contained in a probability distribution is the average log-probability of an event*
+* Intuitively `\(p_i^{-1}\)` measures how surprising an observation is, because surprising observations are characterised by low probability. 
+* Entropy can also be viewed as the expected value `\(E(.)\)` of these surprises.
+* The `\(log(.)\)` is used to that `\(p_i\)` and `\(p_i^{-1}\)` don't cancel out and it also endows entropy with the three desirable properties. 
+]
+]
+---
+class:middle
+## Information entropy
+
+- While its not worth going into the details of the derivation H, it is worth pointing out that nothing about this function is arbitrary.
+
+- Every part of its derives from three requirements above.
+
+- Still, we accept `\(H(p)\)` as a useful measure of uncertainty not because of the premises that lead to it, but rather because it has turned out to be so useful and productive.
+
+---
+class:middle
+## Demystify the function `\(H\)`
+.panelset[
+.panel[.panel-name[A thought experiment]
+- Lets calculate the information entropy for the weather tomorrow
+- Suppose the true probabilities of rain and shine are `\(p_1=0.3\)` and `\(p_2=0.7\)`, respectively. Then:
+
+`$$H(p)=-(p_1 log(p_1)+p_2 log(p_2)) \approx 0.61$$`
+
+```r
+p &lt;- c(0.3,0.7)
+-sum(p*log(p))
+```
+
+```
+## [1] 0.6108643
+```
+]
+.panel[.panel-name[A new thought experiment]
+.pull-left[
+- Suppose instead we live in Abu Dhabi
+- Then the probabilities of rain and shine might be more like `\(p_1=0.01\)` and `\(p_2=0.99\)`
+
+
+```r
+p &lt;- c(0.01,0.99)
+-sum(p*log(p))
+```
+
+```
+## [1] 0.05600153
+```
+]
+.pull-right[
+- now the entropy would be approximately 0.06
+- Why has the uncertainty decreased? 
+- Because in Abu Dhabi it hardly ever rains. 
+- Therefore there’s much less uncertainty about any given day, compared to a place in which it rains 30% of the time. 
+- It’s in this way that information entropy measures the uncertainty inherent in a distribution of events.
+]
+]
+.panel[.panel-name[Add another kind of event]
+* Similarly, if we add another kind of event to the distribution, .blue[forecasting into winter, so also predicting snow], entropy tends to increase, due the added dimensionality of the prediction problem. 
+
+
+```r
+p&lt;-c(0.7,0.15,0.15)
+-sum(p*log(p))
+```
+
+```
+## [1] 0.8188085
+```
+- Then entropy is about 0.82 
+]
+]
+---
+class:middle
+## Overthinking &lt;svg style="height:0.8em;top:.04em;position:relative;" viewBox="0 0 576 512"&gt;&lt;path d="M208 0c-29.9 0-54.7 20.5-61.8 48.2-.8 0-1.4-.2-2.2-.2-35.3 0-64 28.7-64 64 0 4.8.6 9.5 1.7 14C52.5 138 32 166.6 32 200c0 12.6 3.2 24.3 8.3 34.9C16.3 248.7 0 274.3 0 304c0 33.3 20.4 61.9 49.4 73.9-.9 4.6-1.4 9.3-1.4 14.1 0 39.8 32.2 72 72 72 4.1 0 8.1-.5 12-1.2 9.6 28.5 36.2 49.2 68 49.2 39.8 0 72-32.2 72-72V64c0-35.3-28.7-64-64-64zm368 304c0-29.7-16.3-55.3-40.3-69.1 5.2-10.6 8.3-22.3 8.3-34.9 0-33.4-20.5-62-49.7-74 1-4.5 1.7-9.2 1.7-14 0-35.3-28.7-64-64-64-.8 0-1.5.2-2.2.2C422.7 20.5 397.9 0 368 0c-35.3 0-64 28.6-64 64v376c0 39.8 32.2 72 72 72 31.8 0 58.4-20.7 68-49.2 3.9.7 7.9 1.2 12 1.2 39.8 0 72-32.2 72-72 0-4.8-.5-9.5-1.4-14.1 29-12 49.4-40.6 49.4-73.9z"/&gt;&lt;/svg&gt; &lt;svg style="height:0.8em;top:.04em;position:relative;" viewBox="0 0 448 512"&gt;&lt;path d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"/&gt;&lt;/svg&gt; &lt;svg style="height:0.8em;top:.04em;position:relative;" viewBox="0 0 512 512"&gt;&lt;path d="M440.5 88.5l-52 52L415 167c9.4 9.4 9.4 24.6 0 33.9l-17.4 17.4c11.8 26.1 18.4 55.1 18.4 85.6 0 114.9-93.1 208-208 208S0 418.9 0 304 93.1 96 208 96c30.5 0 59.5 6.6 85.6 18.4L311 97c9.4-9.4 24.6-9.4 33.9 0l26.5 26.5 52-52 17.1 17zM500 60h-24c-6.6 0-12 5.4-12 12s5.4 12 12 12h24c6.6 0 12-5.4 12-12s-5.4-12-12-12zM440 0c-6.6 0-12 5.4-12 12v24c0 6.6 5.4 12 12 12s12-5.4 12-12V12c0-6.6-5.4-12-12-12zm33.9 55l17-17c4.7-4.7 4.7-12.3 0-17-4.7-4.7-12.3-4.7-17 0l-17 17c-4.7 4.7-4.7 12.3 0 17 4.8 4.7 12.4 4.7 17 0zm-67.8 0c4.7 4.7 12.3 4.7 17 0 4.7-4.7 4.7-12.3 0-17l-17-17c-4.7-4.7-12.3-4.7-17 0-4.7 4.7-4.7 12.3 0 17l17 17zm67.8 34c-4.7-4.7-12.3-4.7-17 0-4.7 4.7-4.7 12.3 0 17l17 17c4.7 4.7 12.3 4.7 17 0 4.7-4.7 4.7-12.3 0-17l-17-17zM112 272c0-35.3 28.7-64 64-64 8.8 0 16-7.2 16-16s-7.2-16-16-16c-52.9 0-96 43.1-96 96 0 8.8 7.2 16 16 16s16-7.2 16-16z"/&gt;&lt;/svg&gt;: more on entropy
+- Above I said that information entropy is the average log-probability. 
+- But there’s also a −1 in the definition. 
+- Multiplying the average log-probability by −1 just makes the entropy H increase from zero, rather than decrease from zero. 
+- It’s conventional, but not functional. 
+- The logarithms above are natural logs (base e), but changing the base rescales without any effect on inference. Binary logarithms, base 2, are just as common. 
+- As long as all of the entropies you compare use the same base, you’ll be fine.
+
+---
+class: middle,center
+background-image: url(img/title-slide-img.png)
+background-size: cover
+# Learning through growth headspace
+
+.fat.center[Focus for study excercise](https://my.headspace.com/play/1257)
+
+---
+
+class:middle
+## Overthinking &lt;svg style="height:0.8em;top:.04em;position:relative;" viewBox="0 0 576 512"&gt;&lt;path d="M208 0c-29.9 0-54.7 20.5-61.8 48.2-.8 0-1.4-.2-2.2-.2-35.3 0-64 28.7-64 64 0 4.8.6 9.5 1.7 14C52.5 138 32 166.6 32 200c0 12.6 3.2 24.3 8.3 34.9C16.3 248.7 0 274.3 0 304c0 33.3 20.4 61.9 49.4 73.9-.9 4.6-1.4 9.3-1.4 14.1 0 39.8 32.2 72 72 72 4.1 0 8.1-.5 12-1.2 9.6 28.5 36.2 49.2 68 49.2 39.8 0 72-32.2 72-72V64c0-35.3-28.7-64-64-64zm368 304c0-29.7-16.3-55.3-40.3-69.1 5.2-10.6 8.3-22.3 8.3-34.9 0-33.4-20.5-62-49.7-74 1-4.5 1.7-9.2 1.7-14 0-35.3-28.7-64-64-64-.8 0-1.5.2-2.2.2C422.7 20.5 397.9 0 368 0c-35.3 0-64 28.6-64 64v376c0 39.8 32.2 72 72 72 31.8 0 58.4-20.7 68-49.2 3.9.7 7.9 1.2 12 1.2 39.8 0 72-32.2 72-72 0-4.8-.5-9.5-1.4-14.1 29-12 49.4-40.6 49.4-73.9z"/&gt;&lt;/svg&gt; &lt;svg style="height:0.8em;top:.04em;position:relative;" viewBox="0 0 448 512"&gt;&lt;path d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"/&gt;&lt;/svg&gt; &lt;svg style="height:0.8em;top:.04em;position:relative;" viewBox="0 0 512 512"&gt;&lt;path d="M440.5 88.5l-52 52L415 167c9.4 9.4 9.4 24.6 0 33.9l-17.4 17.4c11.8 26.1 18.4 55.1 18.4 85.6 0 114.9-93.1 208-208 208S0 418.9 0 304 93.1 96 208 96c30.5 0 59.5 6.6 85.6 18.4L311 97c9.4-9.4 24.6-9.4 33.9 0l26.5 26.5 52-52 17.1 17zM500 60h-24c-6.6 0-12 5.4-12 12s5.4 12 12 12h24c6.6 0 12-5.4 12-12s-5.4-12-12-12zM440 0c-6.6 0-12 5.4-12 12v24c0 6.6 5.4 12 12 12s12-5.4 12-12V12c0-6.6-5.4-12-12-12zm33.9 55l17-17c4.7-4.7 4.7-12.3 0-17-4.7-4.7-12.3-4.7-17 0l-17 17c-4.7 4.7-4.7 12.3 0 17 4.8 4.7 12.4 4.7 17 0zm-67.8 0c4.7 4.7 12.3 4.7 17 0 4.7-4.7 4.7-12.3 0-17l-17-17c-4.7-4.7-12.3-4.7-17 0-4.7 4.7-4.7 12.3 0 17l17 17zm67.8 34c-4.7-4.7-12.3-4.7-17 0-4.7 4.7-4.7 12.3 0 17l17 17c4.7 4.7 12.3 4.7 17 0 4.7-4.7 4.7-12.3 0-17l-17-17zM112 272c0-35.3 28.7-64 64-64 8.8 0 16-7.2 16-16s-7.2-16-16-16c-52.9 0-96 43.1-96 96 0 8.8 7.2 16 16 16s16-7.2 16-16z"/&gt;&lt;/svg&gt;: more on entropy
+- The only trick in computing H is to deal with the inevitable question of what to do when `\(p_i = 0\)`. 
+- The `\(log(0)=\infty\)`, which won’t do. 
+- However, L’Hopital’s rule tells us that `\(lim_{p_1 \to 0}p_1 log(p_1) = 0\)`  
+- So just assume that `\(0 \times log(0) = 0\)`, when you compute H. 
+- In other words, events that never happen drop out. 
+- This is not really a trick as follows from the definition of a limit. 
+- But it isn’t obvious and it may make more sense to just remember that when an event never happens, there’s no point in keeping it in the model.
+---
+class:middle
+## Joint Entropy
+- More technically, the previous formula defines the marginal entropy of a random variable.
+Let X be a discrete random variable that takes a value x from the set `\(S_X\)` with probability `\(p(x)\)`
+- Let Y be a discrete random variable that takes a value y from the set `\(S_Y\)` with probability `\(p(y)\)`
+- Random variables X and Y do not need to be defined on the same probability space. 
+The joint entropy of X and Y is
+$$ H(X,Y)=-\sum_{x,y \in S_X,Y_X}p(x,y)log(p(x,y))$$
+---
+class: middle
+## Properties of joint entropy
+.blockquote[
+### &lt;svg style="height:0.8em;top:.04em;position:relative;fill:red;" viewBox="0 0 512 512"&gt;&lt;path d="M256 32C114.6 32 0 125.1 0 240c0 49.6 21.4 95 57 130.7C44.5 421.1 2.7 466 2.2 466.5c-2.2 2.3-2.8 5.7-1.5 8.7S4.8 480 8 480c66.3 0 116-31.8 140.6-51.4 32.7 12.3 69 19.4 107.4 19.4 141.4 0 256-93.1 256-208S397.4 32 256 32zM128 272c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32zm128 0c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32zm128 0c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32z"/&gt;&lt;/svg&gt; Statistical thinking
+- .content-box-gray[Nonnegativity] `\(H(X,Y) \ge 0\)`
+- .content-box-yellow[Symmetry] `\(H(X,Y)=H(Y,X)\)`
+- .content-box-red[ Greater than individual entropies] `\(H(X,Y) \ge max(H(X),H(Y))\)`
+- .content-box-green[ Less than or equal to the sum of individual entropies] `\(H(X,Y) \le H(X) + H(Y)\)`
+]
+.bold[
+- Shannon's entropy is finite only for discrete random variables.  In the continuous case, one should use the limiting density of discrete points (LDDP), or discretise the random variable
+]
+---
+class: middle
+## Conditional entropy
+- Joint entropy is used in the definition of conditional entropy
+`$$H(X|Y)=H(X,Y)-H(Y)=-\sum_{y \in S_Y}p(y)\sum_{y \in S_Y}p(x|Y=y) \times log(p(x|Y=y)),$$`
+- where `\(p(x|Y=y)\)`  is the probability that X takes the value x conditioned on Y having taken the value y. 
+- Following this definition, `\(H(X|Y)\)` is the uncertainty we expect in X if we are told the value of Y. 
+- Accordingly, `\(H(X|X)=0\)` and `\(H(X) \ge H(X|Y)\)` 
+---
+class:middle
+## Rethinking &lt;svg style="height:0.8em;top:.04em;position:relative;" viewBox="0 0 576 512"&gt;&lt;path d="M465.4 409.4l87.1-150.2-32-.3-55.1 95L259.2 0 23 407.4l32 .3L259.2 55.6zm-355.3-44.1h32.1l117.4-202.5L463 511.9l32.5.1-235.8-404.6z"/&gt;&lt;/svg&gt; : The benefits of maximizing uncertainty.
+
+- Information theory has many applications. 
+- A particularly important application is .blue[maximum entropy], also known as .blue[maxent]. 
+- Maximum entropy is a family of techniques for finding probability distributions that are most consistent with states of knowledge. 
+- In other words, given what we know, what is the least surprising distribution? 
+- It turns out that one answer to this question maximizes the information entropy, using the prior knowledge as constraint
+- In this way, maxent is at the centre of bayesian inference and machine learning
+101
+---
+class:middle
+## From entropy to accuracy
+- It’s nice to have a way to quantify uncertainty.
+- H provides this. 
+- So we can now say, in a precise way, how hard it is to hit the target. 
+- But how can we use information entropy to say how far one discrete probability distribution is from a target distribution? 
+
+.blockquote[
+### &lt;svg style="height:0.8em;top:.04em;position:relative;" viewBox="0 0 512 512"&gt;&lt;path d="M256 32C114.6 32 0 125.1 0 240c0 49.6 21.4 95 57 130.7C44.5 421.1 2.7 466 2.2 466.5c-2.2 2.3-2.8 5.7-1.5 8.7S4.8 480 8 480c66.3 0 116-31.8 140.6-51.4 32.7 12.3 69 19.4 107.4 19.4 141.4 0 256-93.1 256-208S397.4 32 256 32zM128 272c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32zm128 0c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32zm128 0c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32z"/&gt;&lt;/svg&gt; Statistical thinking
+- The key lies in divergence:
+.bold[Divergence: The additional uncertainty induced by using probabilities from one distribution to describe another distribution.
+]
+]
+
+.footnote[ The concept of entropy concept is also used to measure how far a model is from a target]
+---
+class: middle
+## Kullback-Leibler Divergence
+.blockquote[ 
+.font80[
+#### Thought experiment &lt;svg style="height:0.8em;top:.04em;position:relative;" viewBox="0 0 576 512"&gt;&lt;path d="M208 0c-29.9 0-54.7 20.5-61.8 48.2-.8 0-1.4-.2-2.2-.2-35.3 0-64 28.7-64 64 0 4.8.6 9.5 1.7 14C52.5 138 32 166.6 32 200c0 12.6 3.2 24.3 8.3 34.9C16.3 248.7 0 274.3 0 304c0 33.3 20.4 61.9 49.4 73.9-.9 4.6-1.4 9.3-1.4 14.1 0 39.8 32.2 72 72 72 4.1 0 8.1-.5 12-1.2 9.6 28.5 36.2 49.2 68 49.2 39.8 0 72-32.2 72-72V64c0-35.3-28.7-64-64-64zm368 304c0-29.7-16.3-55.3-40.3-69.1 5.2-10.6 8.3-22.3 8.3-34.9 0-33.4-20.5-62-49.7-74 1-4.5 1.7-9.2 1.7-14 0-35.3-28.7-64-64-64-.8 0-1.5.2-2.2.2C422.7 20.5 397.9 0 368 0c-35.3 0-64 28.6-64 64v376c0 39.8 32.2 72 72 72 31.8 0 58.4-20.7 68-49.2 3.9.7 7.9 1.2 12 1.2 39.8 0 72-32.2 72-72 0-4.8-.5-9.5-1.4-14.1 29-12 49.4-40.6 49.4-73.9z"/&gt;&lt;/svg&gt;
+Suppose for example the true distribution of events is `\(p_1=0.3, p_2=0.7\)`.
+
+If we believe instead that these events happen with probabilities `\(q_1 = 0.25, q_2 = 0.75\)`, how much additional uncertainty have we introduced, as a consequence of using `\(q = {q1, q2}\)` to approximate `\(p = {p1, p2}\)` ? 
+
+The formal answer to this question is based upon H, and has a similarly simple formula:
+
+`$$D_{KL}(p,q)=\sum_i p_i(log(p_i)-log(q_i))=\sum_i p_i log\left(\frac{p_i}{qi}\right)$$`
+
+In plainer language, **the divergence is the average difference in log probability between the target (p) and model (q).** 
+This divergence is just the difference between two entropies: The entropy of the target distribution p and the cross entropy arising from using q to predict p 
+When p = q, we know the actual probabilities of the events. In that case: 
+
+`$$D_{KL}(p,q)=D_{KL}(p,p)=\sum_{i}p_i(log(p_i)-log(p_i))=0$$`
+So a comforting thought is there is no additional uncertainty induced when we use a probability distribution to represent itself.
+]
+]
+
+---
+class:middle,inverse
+## Overthinking &lt;svg style="height:0.8em;top:.04em;position:relative;fill:red;" viewBox="0 0 576 512"&gt;&lt;path d="M208 0c-29.9 0-54.7 20.5-61.8 48.2-.8 0-1.4-.2-2.2-.2-35.3 0-64 28.7-64 64 0 4.8.6 9.5 1.7 14C52.5 138 32 166.6 32 200c0 12.6 3.2 24.3 8.3 34.9C16.3 248.7 0 274.3 0 304c0 33.3 20.4 61.9 49.4 73.9-.9 4.6-1.4 9.3-1.4 14.1 0 39.8 32.2 72 72 72 4.1 0 8.1-.5 12-1.2 9.6 28.5 36.2 49.2 68 49.2 39.8 0 72-32.2 72-72V64c0-35.3-28.7-64-64-64zm368 304c0-29.7-16.3-55.3-40.3-69.1 5.2-10.6 8.3-22.3 8.3-34.9 0-33.4-20.5-62-49.7-74 1-4.5 1.7-9.2 1.7-14 0-35.3-28.7-64-64-64-.8 0-1.5.2-2.2.2C422.7 20.5 397.9 0 368 0c-35.3 0-64 28.6-64 64v376c0 39.8 32.2 72 72 72 31.8 0 58.4-20.7 68-49.2 3.9.7 7.9 1.2 12 1.2 39.8 0 72-32.2 72-72 0-4.8-.5-9.5-1.4-14.1 29-12 49.4-40.6 49.4-73.9z"/&gt;&lt;/svg&gt;: Cross-entropy and divergence
+
+- Deriving divergence is easier than you might think
+
+- The insight is in realizing that when we use a probability distribution q to predict events from another distribution p, 
+- This defines something known as cross entropy:
+
+`$$H_c(p,q)=-\sum_{x\in S_X}p(x)log(q(x))$$`
+
+- The notion is that events arise according the the p’s, but they are expected according to the q’s, so the entropy is inflated, depending upon how different p and q are. 
+---
+class:middle,inverse
+## Overthinking &lt;svg style="height:0.8em;top:.04em;position:relative;fill:red;" viewBox="0 0 576 512"&gt;&lt;path d="M208 0c-29.9 0-54.7 20.5-61.8 48.2-.8 0-1.4-.2-2.2-.2-35.3 0-64 28.7-64 64 0 4.8.6 9.5 1.7 14C52.5 138 32 166.6 32 200c0 12.6 3.2 24.3 8.3 34.9C16.3 248.7 0 274.3 0 304c0 33.3 20.4 61.9 49.4 73.9-.9 4.6-1.4 9.3-1.4 14.1 0 39.8 32.2 72 72 72 4.1 0 8.1-.5 12-1.2 9.6 28.5 36.2 49.2 68 49.2 39.8 0 72-32.2 72-72V64c0-35.3-28.7-64-64-64zm368 304c0-29.7-16.3-55.3-40.3-69.1 5.2-10.6 8.3-22.3 8.3-34.9 0-33.4-20.5-62-49.7-74 1-4.5 1.7-9.2 1.7-14 0-35.3-28.7-64-64-64-.8 0-1.5.2-2.2.2C422.7 20.5 397.9 0 368 0c-35.3 0-64 28.6-64 64v376c0 39.8 32.2 72 72 72 31.8 0 58.4-20.7 68-49.2 3.9.7 7.9 1.2 12 1.2 39.8 0 72-32.2 72-72 0-4.8-.5-9.5-1.4-14.1 29-12 49.4-40.6 49.4-73.9z"/&gt;&lt;/svg&gt;: Cross-entropy and divergence
+- Divergence is defined as the additional entropy induced by using q. 
+- So it’s just the difference between `\(H(p)\)`, the actual entropy of events, and `\(H(p, q)\)`:
+
+`\begin{align*}
+DKL(p, q) &amp; = H(p, q) − H(p) \\
+&amp; =-\sum p_i log(q_i) - (-\sum p_i log(p_i)) \\
+&amp; = -\sum p_i(log(q_i)-log(p_i))
+\end{align*}`
+
+- So divergence really is measuring how far q is from the target p, in units of entropy. 
+- Notice that which is the target matters: `\(H(p, q)\)` does not in general equal `\(H(q, p)\)`. 
+---
+class:middle
+# Cross-entropy
+- In FML cross-entropy interpreted as the uncertainty associated with X, where we evaluate its information content using a wrong distribution q rather than the true distribution p. 
+- Cross-entropy is a popular scoring function in classification problems, and it is particularly meaningful in financial applications 
+- López de Prado (2018), in section 9.4,  should how cross-entropy (also called the log loss)  is a superior scoring statistic when using an ML investment strategy classifier to identify when to buy a security.
+---
+class:middle
+## The use of divergence
+- The KL divergence is not a metric
+.blockquote[
+### &lt;svg style="height:0.8em;top:.04em;position:relative;" viewBox="0 0 512 512"&gt;&lt;path d="M256 32C114.6 32 0 125.1 0 240c0 49.6 21.4 95 57 130.7C44.5 421.1 2.7 466 2.2 466.5c-2.2 2.3-2.8 5.7-1.5 8.7S4.8 480 8 480c66.3 0 116-31.8 140.6-51.4 32.7 12.3 69 19.4 107.4 19.4 141.4 0 256-93.1 256-208S397.4 32 256 32zM128 272c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32zm128 0c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32zm128 0c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32z"/&gt;&lt;/svg&gt; Statistical thinking
+- It is always nonnegative, but it violates the symmetry and triangle inequality conditions.
+- Divergence depends on direction so it violates the symmetry and triangle inequality conditions:  
+
+`$$D_{KL}(p,q) \neq D_{KL}(q,p)$$`
+
+- .bold[Note the difference with the definition of joint entropy, where the two random variables did not necessarily exist in the same probability space.] 
+- KL divergence is widely used in variational inference (a popular tool in machine learning model selection) and bayesian inference (Blei, Kucukelbir, and McAuliffe, 2016).
+]
+---
+class:middle
+## Mutual information
+- Mutual information is defined as the decrease in uncertainty [or informational gain) in X that results from the knowing of Y
+
+`$$I(X,Y)=H(X)-H(X|Y)=H(X)+H(Y)-H(X,Y)$$`
+- In plain words: .bold[.blue[information gain in X of knowing Y is the sum of the individual marginal entropies reduced by the joint entropy]]
+-  show that `\(I(X,Y)\)` is nonnegative, symmetrical, but is not a *metric* as it does not satisfy the triangle inequality `\(I(X,Z) \nleq I(X,Y)+I(Y,Z)\)`
+
+---
+class:middle
+## Variation of information
+- Variation of information is defined as:
+
+`\begin{align*}
+VI(X,Y) &amp;= H(X|Y)+H(Y|X) \\
+ &amp;= H(X)+H(Y)-2I(X,Y) \\
+ &amp;=2H(X,Y)-H(X)-HY) \\
+ &amp;= H(X,Y)-I(X,Y)
+\end{align*}`
+
+- This can be interpreted as the uncertainty we expect in one variable if we are told the value of the other.
+- Variation of information is a metric because it satisfies all three axioms.
+- As `\(H(X,Y)\)` is a function of  the sizes of `\(S_x\)` and `\(S_Y\)`, `\(VI(X,Y)\)` does not have an upper bound, which makes comparison across population sizes problematic.
+- In practice a normalised version of variation of information is used to solve this problem
+
+---
+class: middle
+## Experimental evidence
+.panelset[
+.panel[.panel-name[Discretisation]
+.small[
+- Firstly, we need a function to quantise (coarse-grain) the continous values, and apply the same concepts on the resultant binned observations.
+- See López de Prado (2020) section 3.9 for mathematical details of discretization
+]
+```
+numBins&lt;-function(nObs,corr=NULL){
+  #Optimal
+  if (is.null(corr)) {
+    z=(8+324*nObs+12*(36*nObs+729*nObs^2)^0.5)^(1/3)
+    b=round(z/6+2/(3*z)+1/3)
+  }
+  else {
+    #bivariate case
+    b=round(2^(-0.5)*(1+(1+24*nObs/(1-corr^2))^0.5)^0.5)
+  }
+  return(b)
+}
+```
+]
+.panel[
+.panel-name[No relationship]
+.pull-left[
+- Lets compare two randomly generated numbers
+- we will be using the package `entropy` to produce the information-theoretic estimates.
+
+```r
+library(entropy) # package which will do much of the heavy lifting
+set.seed(1234) # set seed for random number generation
+size=1000
+df&lt;-tibble(x=rnorm(size),y=0*x+rnorm(size))
+bXY=numBins(nrow(df), corr=cor(df)[1,2])
+y2D=discretize2d(df$x,df$y,numBins1 = bXY,numBins2 = bXY)
+Hx=entropy(rowSums(y2D))
+Hy=entropy(colSums(y2D))
+nmi=mi.empirical(y2D)/min(Hx,Hy)
+cor(df)[1,2]-&gt;cor_coef
+```
+]
+.pull-right[
+![](index_files/figure-html/unnamed-chunk-4-1.png)&lt;!-- --&gt;
+
+- The correlation coefficient is much larger than the information-theoretic `nmi`, suggesting that it the latter is a better measure of the signal in the data.
+]
+]
+.panel[
+.panel-name[Linear relationship]
+.pull-left[
+
+```r
+df&lt;-tibble(x=rnorm(size),y=100*x+rnorm(size))
+bXY=numBins(nrow(df), corr=cor(df)[1,2])
+y2D=discretize2d(df$x,df$y,numBins1 = bXY,numBins2 = bXY)
+Hx=entropy(rowSums(y2D))
+Hy=entropy(colSums(y2D))
+nmi=mi.empirical(y2D)/min(Hx,Hy)
+cor(df)[1,2]-&gt;cor_coef
+```
+]
+.pull-right[
+![](index_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
+]
+]
+.panel[
+.panel-name[Non-linear relationship]
+.pull-left[
+
+```r
+df&lt;-tibble(x=rnorm(size),y=100*abs(x)+rnorm(size))
+bXY=numBins(nrow(df), corr=cor(df)[1,2])
+y2D=discretize2d(df$x,df$y,numBins1 = bXY,numBins2 = bXY)
+Hx=entropy(rowSums(y2D))
+Hy=entropy(colSums(y2D))
+nmi=mi.empirical(y2D)/min(Hx,Hy)
+cor(df)[1,2]-&gt;cor_coef
+```
+]
+.pull-right[
+![](index_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
+]
+]
+]
+
+---
+class:middle
+## Transfer entropy
+- Financial time series dynamics are at the core of many interesting questions in quantitative finance
+- In many cases this flow of information between markets can be approximate using these dynamics
+- As useful extract of the previous concepts in this area is [Transfer entropy](https://en.wikipedia.org/wiki/Transfer_entropy)  which measures the amount of directed (time-asymmetric) transfer of information between two random processes.
+- Transfer entropy is conditional mutual information with the history of the influenced variable as condition.
+- In standard econometrics, transfer entropy is the non-parametric analogue to granger casuality from a vector autoregressive process.
+- It generalises to allow for non-linear signal analysis
+-We will use the `RTransferEntropy` to investigate  (Simon, Thomas, Franziska J., et al., 2019)
+---
+class: middle
+## Information flows in financial markets
+- Quantifying information flow between markets and individual stocks is a central tenant of quantitative research
+
+- CAPM prices stocks in this way, imposing a linear unidirectional relationship between individual stocks and the market return
+
+- .large[.red[Is this assumption credible?]]
+
+- We will test this assumption using a selection of 10 stocks from the S&amp;P 500
+---
+## Information flow in financial markets 
+- Due to the need for Monte Carlo bootstrapping the estimation can be run over multicores.
+- .red[WARNING] you will need a machine with at least 4 cores to run this in a reasonable time 
+- Using 64 cores the code below ran in 10 minutes.
+
+.code80[
+```
+library(RTransferEntropy)
+library(future)
+# enable parallel processing
+plan(multisession) # initialised a multicore enviroment
+data("stocks") # loads data 
+stocks %&gt;% glimpse()
+TE&lt;-stocks %&gt;% 
+  group_by(ticker) %&gt;% 
+  group_split(.keep = TRUE) %&gt;%
+  map(~transfer_entropy(x = .x$ret,y=.x$sp500,shuffles = 500,type = "bins",bins=12)) 
+names(TE)&lt;-unique(stocks$ticker)
+```
+]
+---
+class: middle
+## Information flows in financial markets
+
+.pull-left[
+![](index_files/figure-html/unnamed-chunk-9-1.png)&lt;!-- --&gt;
+]
+.pull-right[
+- The results indicate that there is indeed a bi-directional flow of information present.
+- Notably, there are some significant differences in the flows, for example AMD (Advance Micro Devices) contributes much more information to the market than it receives from it.
+
+.font80[
+.blockquote[The stock market index itself is a weighted average of individual stocks. Of course, small stocks have less weight and,thus, may only have limited impact on the index, while large corporations might dominate. Transfer entropy can be used to unveil the information that flows from the individual companies’returns to the market. 
+-(Simon, Thomas, Franziska J., et al., 2019)]
+]
+]
+---
+class:middle
+## Conclusion
+- Correlations are useful at quantifying the linear codependency between random variables.
+.font60[
+  - This form of codependency accepts various representations as a distance metric
+  
+`\begin{align*}
+d_p\left(X,Y\right)=\sqrt{1/2\left(1- \rho\left(X,Y \right)\right)} \\
+\text{OR} \\
+d_{|p|}(X,Y)=\sqrt{1-|p(X,Y)|}
+\end{align*}`
+
+  - where X and Y are two discrete random variables draw from sets `\(S_x\)` and `\(S_y\)` respectively.
+]
+- However,when variables X and Y are bound by a nonlinear relationship, the above distance metric misjudges the similarity of these variables.
+
+- For non-linear cases,  argues the normalized mutual information is a more appropriate distance metric. 
+
+  - It allows us to answer questions regarding the unique information contributed by a random variable, without having to make functional assumptions.
+
+- Given that many ML algorithms do not impose a functional form on the data, it makes sense to use them in conjunction with entropy-based features.
+
+---
+class:middle
+## References
+
+```
+## [BKM16] D. M. Blei, A. Kucukelbir, and J.
+## D. McAuliffe. "Variational Inference: A
+## Review for Statisticians".  (Jan. 2016).
+## arXiv: 1601.00670 [stat.CO].
+## 
+## [Pra18] M. López de Prado. _Advances in
+## Financial Machine Learning_. En. John
+## Wiley &amp; Sons, Feb. 2018.
+## 
+## [Pra20] M. López de Prado. "Machine
+## Learning for Asset Managers". In:
+## _Elements in Quantitative Finance_.
+## Cambridge University Press, Apr. 2020.
+## 
+## [RS07] D. M. Raymer and D. E. Smith.
+## "Spontaneous knotting of an agitated
+## string". En. In: _Proc. Natl. Acad. Sci.
+## U. S. A._ 104.42 (Oct. 2007), pp.
+## 16432-16437.
+## 
+## [Sim+19] B. Simon, D. Thomas, P. Franziska
+## J., et al. "RTransferEntropy — Quantifying
+## information flow between different time
+## series using effective transfer entropy".
+## In: _SoftwareX_ 10.100265 (2019), pp. 1-9.
+## URL:
+## [https://doi.org/10.1016/j.softx.2019.100265](https://doi.org/10.1016/j.softx.2019.100265).
+```
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="https://platform.twitter.com/widgets.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
