@@ -2,7 +2,7 @@
 title: "Algorithmic trading and investment"
 subtitle: "Distance metrics"
 author: "Barry Quinn"
-date: "20/12/2019 (updated `r Sys.Date()`)"
+date: "20/12/2019 "
 output:
   xaringan::moon_reader:
     css: ["default", "fonts.css", "mycssblend.css"]
@@ -231,7 +231,7 @@ class:middle
 
 -  `r Citet(myBib,"Raymer2007")` using **knot theory** explain that knots will appear with 100% probability beyond an optimal length of string, about a foot.
 
-- `r fa("apple")`have used this math to attempt their earphones to be tangle-proof
+- `r fa("apple",height=20)`have used this mathematics in an attempt to make their wired earphones to be tangle-proof
 ]
 ---
 class:middle
@@ -257,36 +257,41 @@ class:middle
 
 2. Correlation is highly influenced by outliers. 
 
-3. Its application beyond the multivariate Normal case is questionable.     - We may compute the correlation between any two real variables, however that correlation is typically meaningless unless the two variables follow a bivariate Normal distribution. 
+3. Its application beyond the multivariate normal case is questionable.     
+
+  - We may compute the correlation between any two real variables, however that correlation is typically meaningless unless the two variables follow a bivariate Normal distribution. 
 
 - .bold[.red[To overcome these caveats, we need to introduce a few information-theoretic concepts.]]
 
 ---
 class:middle
-## Entropy and the challenge of accuracy
-
+## Entropy and the challenge of measuring accuracy
+.acid[ 
 - To measure distance from perfect accuracy we require a measurement scale.
-- .blue[Information theory] provides a natural measurement scale for distance between two probability distributions.
-- Second we need to establish .blue[deviance] as an approximation of relative distance from perfect accuracy.
-- The basics of information theory tells us that a good measure of uncertainty (or accuracy) should satisfy three properties
+- .blue-content-box[Information theory] provides a natural measurement scale for distance between two probability distributions.
+- Furthermore, we need to establish .blue-content-box[deviance] as an approximation of relative distance from perfect accuracy.
+- The basics of .blue-content-box[information theory] tells us that a good measure of uncertainty (or accuracy) should satisfy three properties
+]
 ---
 class:middle
 ## Desirable properties of good uncertainty measure
 
-1. .font110[the measure should be continuous]
-  * .font60[If it were not, then an arbitrarily small change in any of the probabilities, for example the probability of rain, would result in a massive change in uncertainty.]
-2. .font110[It should increase as the number of possible events increases]
-  * .font60[For example, suppose there are two cities that need weather forecasts. In the first city, it rains on half of the days in the year and is sunny on the others. In the second, it rains, shines, and hails, each on 1 out of every 3 days in the year. We’d like our measure of uncertainty to be larger in the second city, where there is one more kind of event to predict.]
-3. .font110[It should be additive]
-  * .font60[What this means is that if we first measure the uncertainty about rain or shine (2 possible events) and then the uncertainty about hot or cold (2 different possible events), the uncertainty over the four combinations of these events—rain/hot, rain/cold, shine/hot, shine/cold—should be the sum of the separate uncertainties.]
+1. .large[the measure should be continuous]
+  * .small[If it were not, then an arbitrarily small change in any of the probabilities, for example the probability of rain, would result in a massive change in uncertainty.]
+2. .large[It should increase as the number of possible events increases]
+  * .small[For example, suppose there are two cities that need weather forecasts. In the first city, it rains on half of the days in the year and is sunny on the others. In the second, it rains, shines, and hails, each on 1 out of every 3 days in the year. We’d like our measure of uncertainty to be larger in the second city, where there is one more kind of event to predict.]
+3. .large[It should be additive]
+  * .small[What this means is that if we first measure the uncertainty about rain or shine (2 possible events) and then the uncertainty about hot or cold (2 different possible events), the uncertainty over the four combinations of these events—rain/hot, rain/cold, shine/hot, shine/cold—should be the sum of the separate uncertainties.]
 
 ---
 class:middle
 ## Information entropy
-The one function that satisfies these three properties is called .bold[.blue[INFORMATION ENTROPY]], and it has a surprisingly simple definition.
+.pull-left-1[
+The one function that satisfies these three properties is called .blue-content-box[INFORMATION ENTROPY], and it has a surprisingly simple definition.]
 
+.pull-right-2[
 .blockquote[
-.font80[
+.small[
 ### `r fa("comment-dots")` Statistical thinking
 * If there are n different possible events and each event i has probability $p_i$, and we call the list of probabilities $p$ then the unique measure of uncertainty we seek is :
 
@@ -300,6 +305,8 @@ H\left(p\right)=-E(log(p_i))= -\sum_{i=1}^{n} p_i log(p_i)
 * The $log(.)$ is used to that $p_i$ and $p_i^{-1}$ don't cancel out and it also endows entropy with the three desirable properties. 
 ]
 ]
+]
+
 ---
 class:middle
 ## Information entropy
@@ -440,10 +447,9 @@ class:middle
 .footnote[ The concept of entropy concept is also used to measure how far a model is from a target]
 ---
 class: middle
-## Kullback-Leibler Divergence
-.blockquote[ 
-.font80[
-#### Thought experiment `r fa(name="brain")`
+## Kullback-Leibler Divergence `r fa(name="brain")`
+
+.pull-left[
 Suppose for example the true distribution of events is $p_1=0.3, p_2=0.7$.
 
 If we believe instead that these events happen with probabilities $q_1 = 0.25, q_2 = 0.75$, how much additional uncertainty have we introduced, as a consequence of using $q = {q1, q2}$ to approximate $p = {p1, p2}$ ? 
@@ -451,14 +457,14 @@ If we believe instead that these events happen with probabilities $q_1 = 0.25, q
 The formal answer to this question is based upon H, and has a similarly simple formula:
 
 $$D_{KL}(p,q)=\sum_i p_i(log(p_i)-log(q_i))=\sum_i p_i log\left(\frac{p_i}{qi}\right)$$
-
-In plainer language, **the divergence is the average difference in log probability between the target (p) and model (q).** 
-This divergence is just the difference between two entropies: The entropy of the target distribution p and the cross entropy arising from using q to predict p 
-When p = q, we know the actual probabilities of the events. In that case: 
+]
+.pull-right[
+- In plainer language, **the divergence is the average difference in log probability between the target (p) and model (q).** 
+- This divergence is just the difference between two entropies: The entropy of the target distribution p and the cross entropy arising from using q to predict p
+- When p = q, we know the actual probabilities of the events. In that case: 
 
 $$D_{KL}(p,q)=D_{KL}(p,p)=\sum_{i}p_i(log(p_i)-log(p_i))=0$$
-So a comforting thought is there is no additional uncertainty induced when we use a probability distribution to represent itself.
-]
+S- o a comforting thought is there is no additional uncertainty induced when we use a probability distribution to represent itself.
 ]
 
 ---
@@ -473,6 +479,7 @@ class:middle,inverse
 $$H_c(p,q)=-\sum_{x\in S_X}p(x)log(q(x))$$
 
 - The notion is that events arise according the the p’s, but they are expected according to the q’s, so the entropy is inflated, depending upon how different p and q are. 
+
 ---
 class:middle,inverse
 ## Overthinking `r fa("brain", fill="red")`: Cross-entropy and divergence
@@ -575,7 +582,8 @@ nmi=mi.empirical(y2D)/min(Hx,Hy)
 cor(df)[1,2]->cor_coef
 ```
 ]
-.pull-right[
+.pull-right.small[
+- The correlation coefficient is much larger than the information-theoretic `nmi`, suggesting that it the latter is a better measure of the signal in the data.
 ```{r, echo=FALSE, fig.height=5, fig.width=5}
 # use ggplot2 hist2d geom to extract
 ggplot(df,aes(x=x,y=y)) + 
@@ -584,8 +592,6 @@ ggplot(df,aes(x=x,y=y)) +
   annotate("text",label=paste0("nmi=",round(nmi,4)),x=-2.5,y=3) +
   annotate("text",label=paste0("cor_coef=",round(cor_coef,4)),x=-2.5,y=2.5)
 ```
-
-- The correlation coefficient is much larger than the information-theoretic `nmi`, suggesting that it the latter is a better measure of the signal in the data.
 ]
 ]
 .panel[
@@ -643,6 +649,7 @@ class:middle
 - In standard econometrics, transfer entropy is the non-parametric analogue to granger casuality from a vector autoregressive process.
 - It generalises to allow for non-linear signal analysis
 -We will use the `RTransferEntropy` to investigate  `r Citep(myBib,"RTE2019")`
+
 ---
 class: middle
 ## Information flows in financial markets
@@ -653,13 +660,15 @@ class: middle
 - .large[.red[Is this assumption credible?]]
 
 - We will test this assumption using a selection of 10 stocks from the S&P 500
+
 ---
+class:middle
 ## Information flow in financial markets 
 - Due to the need for Monte Carlo bootstrapping the estimation can be run over multicores.
-- .red[WARNING] you will need a machine with at least 4 cores to run this in a reasonable time 
+- .red-content-box[WARNING] you will need a machine with at least 4 cores to run this in a reasonable time 
 - Using 64 cores the code below ran in 10 minutes.
 
-.code80[
+.small[
 ```
 library(RTransferEntropy)
 library(future)

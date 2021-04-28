@@ -34,7 +34,7 @@ class: center, middle, inverse, title-slide
 # Algorithmic trading and investment
 ## Distance metrics
 ### Barry Quinn
-### 20/12/2019 (updated 2021-04-23)
+### 20/12/2019
 
 ---
 
@@ -228,7 +228,7 @@ class:middle
 
 -  Raymer and Smith (2007) using **knot theory** explain that knots will appear with 100% probability beyond an optimal length of string, about a foot.
 
-- &lt;svg style="height:0.8em;top:.04em;position:relative;" viewBox="0 0 384 512"&gt;&lt;path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/&gt;&lt;/svg&gt;have used this math to attempt their earphones to be tangle-proof
+- &lt;svg style="height:20;" viewBox="0 0 384 512"&gt;&lt;path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/&gt;&lt;/svg&gt;have used this mathematics in an attempt to make their wired earphones to be tangle-proof
 ]
 ---
 class:middle
@@ -254,36 +254,41 @@ class:middle
 
 2. Correlation is highly influenced by outliers. 
 
-3. Its application beyond the multivariate Normal case is questionable.     - We may compute the correlation between any two real variables, however that correlation is typically meaningless unless the two variables follow a bivariate Normal distribution. 
+3. Its application beyond the multivariate normal case is questionable.     
+
+  - We may compute the correlation between any two real variables, however that correlation is typically meaningless unless the two variables follow a bivariate Normal distribution. 
 
 - .bold[.red[To overcome these caveats, we need to introduce a few information-theoretic concepts.]]
 
 ---
 class:middle
-## Entropy and the challenge of accuracy
-
+## Entropy and the challenge of measuring accuracy
+.acid[ 
 - To measure distance from perfect accuracy we require a measurement scale.
-- .blue[Information theory] provides a natural measurement scale for distance between two probability distributions.
-- Second we need to establish .blue[deviance] as an approximation of relative distance from perfect accuracy.
-- The basics of information theory tells us that a good measure of uncertainty (or accuracy) should satisfy three properties
+- .blue-content-box[Information theory] provides a natural measurement scale for distance between two probability distributions.
+- Furthermore, we need to establish .blue-content-box[deviance] as an approximation of relative distance from perfect accuracy.
+- The basics of .blue-content-box[information theory] tells us that a good measure of uncertainty (or accuracy) should satisfy three properties
+]
 ---
 class:middle
 ## Desirable properties of good uncertainty measure
 
-1. .font110[the measure should be continuous]
-  * .font60[If it were not, then an arbitrarily small change in any of the probabilities, for example the probability of rain, would result in a massive change in uncertainty.]
-2. .font110[It should increase as the number of possible events increases]
-  * .font60[For example, suppose there are two cities that need weather forecasts. In the first city, it rains on half of the days in the year and is sunny on the others. In the second, it rains, shines, and hails, each on 1 out of every 3 days in the year. We’d like our measure of uncertainty to be larger in the second city, where there is one more kind of event to predict.]
-3. .font110[It should be additive]
-  * .font60[What this means is that if we first measure the uncertainty about rain or shine (2 possible events) and then the uncertainty about hot or cold (2 different possible events), the uncertainty over the four combinations of these events—rain/hot, rain/cold, shine/hot, shine/cold—should be the sum of the separate uncertainties.]
+1. .large[the measure should be continuous]
+  * .small[If it were not, then an arbitrarily small change in any of the probabilities, for example the probability of rain, would result in a massive change in uncertainty.]
+2. .large[It should increase as the number of possible events increases]
+  * .small[For example, suppose there are two cities that need weather forecasts. In the first city, it rains on half of the days in the year and is sunny on the others. In the second, it rains, shines, and hails, each on 1 out of every 3 days in the year. We’d like our measure of uncertainty to be larger in the second city, where there is one more kind of event to predict.]
+3. .large[It should be additive]
+  * .small[What this means is that if we first measure the uncertainty about rain or shine (2 possible events) and then the uncertainty about hot or cold (2 different possible events), the uncertainty over the four combinations of these events—rain/hot, rain/cold, shine/hot, shine/cold—should be the sum of the separate uncertainties.]
 
 ---
 class:middle
 ## Information entropy
-The one function that satisfies these three properties is called .bold[.blue[INFORMATION ENTROPY]], and it has a surprisingly simple definition.
+.pull-left-1[
+The one function that satisfies these three properties is called .blue-content-box[INFORMATION ENTROPY], and it has a surprisingly simple definition.]
 
+.pull-right-2[
 .blockquote[
-.font80[
+.small[
 ### &lt;svg style="height:0.8em;top:.04em;position:relative;" viewBox="0 0 512 512"&gt;&lt;path d="M256 32C114.6 32 0 125.1 0 240c0 49.6 21.4 95 57 130.7C44.5 421.1 2.7 466 2.2 466.5c-2.2 2.3-2.8 5.7-1.5 8.7S4.8 480 8 480c66.3 0 116-31.8 140.6-51.4 32.7 12.3 69 19.4 107.4 19.4 141.4 0 256-93.1 256-208S397.4 32 256 32zM128 272c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32zm128 0c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32zm128 0c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32z"/&gt;&lt;/svg&gt; Statistical thinking
 * If there are n different possible events and each event i has probability `\(p_i\)`, and we call the list of probabilities `\(p\)` then the unique measure of uncertainty we seek is :
 
@@ -297,6 +302,8 @@ H\left(p\right)=-E(log(p_i))= -\sum_{i=1}^{n} p_i log(p_i)
 * The `\(log(.)\)` is used to that `\(p_i\)` and `\(p_i^{-1}\)` don't cancel out and it also endows entropy with the three desirable properties. 
 ]
 ]
+]
+
 ---
 class:middle
 ## Information entropy
@@ -452,10 +459,9 @@ class:middle
 .footnote[ The concept of entropy concept is also used to measure how far a model is from a target]
 ---
 class: middle
-## Kullback-Leibler Divergence
-.blockquote[ 
-.font80[
-#### Thought experiment &lt;svg style="height:0.8em;top:.04em;position:relative;" viewBox="0 0 576 512"&gt;&lt;path d="M208 0c-29.9 0-54.7 20.5-61.8 48.2-.8 0-1.4-.2-2.2-.2-35.3 0-64 28.7-64 64 0 4.8.6 9.5 1.7 14C52.5 138 32 166.6 32 200c0 12.6 3.2 24.3 8.3 34.9C16.3 248.7 0 274.3 0 304c0 33.3 20.4 61.9 49.4 73.9-.9 4.6-1.4 9.3-1.4 14.1 0 39.8 32.2 72 72 72 4.1 0 8.1-.5 12-1.2 9.6 28.5 36.2 49.2 68 49.2 39.8 0 72-32.2 72-72V64c0-35.3-28.7-64-64-64zm368 304c0-29.7-16.3-55.3-40.3-69.1 5.2-10.6 8.3-22.3 8.3-34.9 0-33.4-20.5-62-49.7-74 1-4.5 1.7-9.2 1.7-14 0-35.3-28.7-64-64-64-.8 0-1.5.2-2.2.2C422.7 20.5 397.9 0 368 0c-35.3 0-64 28.6-64 64v376c0 39.8 32.2 72 72 72 31.8 0 58.4-20.7 68-49.2 3.9.7 7.9 1.2 12 1.2 39.8 0 72-32.2 72-72 0-4.8-.5-9.5-1.4-14.1 29-12 49.4-40.6 49.4-73.9z"/&gt;&lt;/svg&gt;
+## Kullback-Leibler Divergence &lt;svg style="height:0.8em;top:.04em;position:relative;" viewBox="0 0 576 512"&gt;&lt;path d="M208 0c-29.9 0-54.7 20.5-61.8 48.2-.8 0-1.4-.2-2.2-.2-35.3 0-64 28.7-64 64 0 4.8.6 9.5 1.7 14C52.5 138 32 166.6 32 200c0 12.6 3.2 24.3 8.3 34.9C16.3 248.7 0 274.3 0 304c0 33.3 20.4 61.9 49.4 73.9-.9 4.6-1.4 9.3-1.4 14.1 0 39.8 32.2 72 72 72 4.1 0 8.1-.5 12-1.2 9.6 28.5 36.2 49.2 68 49.2 39.8 0 72-32.2 72-72V64c0-35.3-28.7-64-64-64zm368 304c0-29.7-16.3-55.3-40.3-69.1 5.2-10.6 8.3-22.3 8.3-34.9 0-33.4-20.5-62-49.7-74 1-4.5 1.7-9.2 1.7-14 0-35.3-28.7-64-64-64-.8 0-1.5.2-2.2.2C422.7 20.5 397.9 0 368 0c-35.3 0-64 28.6-64 64v376c0 39.8 32.2 72 72 72 31.8 0 58.4-20.7 68-49.2 3.9.7 7.9 1.2 12 1.2 39.8 0 72-32.2 72-72 0-4.8-.5-9.5-1.4-14.1 29-12 49.4-40.6 49.4-73.9z"/&gt;&lt;/svg&gt;
+
+.pull-left[
 Suppose for example the true distribution of events is `\(p_1=0.3, p_2=0.7\)`.
 
 If we believe instead that these events happen with probabilities `\(q_1 = 0.25, q_2 = 0.75\)`, how much additional uncertainty have we introduced, as a consequence of using `\(q = {q1, q2}\)` to approximate `\(p = {p1, p2}\)` ? 
@@ -463,14 +469,14 @@ If we believe instead that these events happen with probabilities `\(q_1 = 0.25,
 The formal answer to this question is based upon H, and has a similarly simple formula:
 
 `$$D_{KL}(p,q)=\sum_i p_i(log(p_i)-log(q_i))=\sum_i p_i log\left(\frac{p_i}{qi}\right)$$`
-
-In plainer language, **the divergence is the average difference in log probability between the target (p) and model (q).** 
-This divergence is just the difference between two entropies: The entropy of the target distribution p and the cross entropy arising from using q to predict p 
-When p = q, we know the actual probabilities of the events. In that case: 
+]
+.pull-right[
+- In plainer language, **the divergence is the average difference in log probability between the target (p) and model (q).** 
+- This divergence is just the difference between two entropies: The entropy of the target distribution p and the cross entropy arising from using q to predict p
+- When p = q, we know the actual probabilities of the events. In that case: 
 
 `$$D_{KL}(p,q)=D_{KL}(p,p)=\sum_{i}p_i(log(p_i)-log(p_i))=0$$`
-So a comforting thought is there is no additional uncertainty induced when we use a probability distribution to represent itself.
-]
+S- o a comforting thought is there is no additional uncertainty induced when we use a probability distribution to represent itself.
 ]
 
 ---
@@ -485,6 +491,7 @@ class:middle,inverse
 `$$H_c(p,q)=-\sum_{x\in S_X}p(x)log(q(x))$$`
 
 - The notion is that events arise according the the p’s, but they are expected according to the q’s, so the entropy is inflated, depending upon how different p and q are. 
+
 ---
 class:middle,inverse
 ## Overthinking &lt;svg style="height:0.8em;top:.04em;position:relative;fill:red;" viewBox="0 0 576 512"&gt;&lt;path d="M208 0c-29.9 0-54.7 20.5-61.8 48.2-.8 0-1.4-.2-2.2-.2-35.3 0-64 28.7-64 64 0 4.8.6 9.5 1.7 14C52.5 138 32 166.6 32 200c0 12.6 3.2 24.3 8.3 34.9C16.3 248.7 0 274.3 0 304c0 33.3 20.4 61.9 49.4 73.9-.9 4.6-1.4 9.3-1.4 14.1 0 39.8 32.2 72 72 72 4.1 0 8.1-.5 12-1.2 9.6 28.5 36.2 49.2 68 49.2 39.8 0 72-32.2 72-72V64c0-35.3-28.7-64-64-64zm368 304c0-29.7-16.3-55.3-40.3-69.1 5.2-10.6 8.3-22.3 8.3-34.9 0-33.4-20.5-62-49.7-74 1-4.5 1.7-9.2 1.7-14 0-35.3-28.7-64-64-64-.8 0-1.5.2-2.2.2C422.7 20.5 397.9 0 368 0c-35.3 0-64 28.6-64 64v376c0 39.8 32.2 72 72 72 31.8 0 58.4-20.7 68-49.2 3.9.7 7.9 1.2 12 1.2 39.8 0 72-32.2 72-72 0-4.8-.5-9.5-1.4-14.1 29-12 49.4-40.6 49.4-73.9z"/&gt;&lt;/svg&gt;: Cross-entropy and divergence
@@ -588,10 +595,9 @@ nmi=mi.empirical(y2D)/min(Hx,Hy)
 cor(df)[1,2]-&gt;cor_coef
 ```
 ]
-.pull-right[
-![](index_files/figure-html/unnamed-chunk-4-1.png)&lt;!-- --&gt;
-
+.pull-right.small[
 - The correlation coefficient is much larger than the information-theoretic `nmi`, suggesting that it the latter is a better measure of the signal in the data.
+![](index_files/figure-html/unnamed-chunk-4-1.png)&lt;!-- --&gt;
 ]
 ]
 .panel[
@@ -641,7 +647,8 @@ class:middle
 - Transfer entropy is conditional mutual information with the history of the influenced variable as condition.
 - In standard econometrics, transfer entropy is the non-parametric analogue to granger casuality from a vector autoregressive process.
 - It generalises to allow for non-linear signal analysis
--We will use the `RTransferEntropy` to investigate  (Simon, Thomas, Franziska J., et al., 2019)
+-We will use the `RTransferEntropy` to investigate  (Simon, Thomas, Franziska J., and David J., 2019)
+
 ---
 class: middle
 ## Information flows in financial markets
@@ -652,13 +659,15 @@ class: middle
 - .large[.red[Is this assumption credible?]]
 
 - We will test this assumption using a selection of 10 stocks from the S&amp;P 500
+
 ---
+class:middle
 ## Information flow in financial markets 
 - Due to the need for Monte Carlo bootstrapping the estimation can be run over multicores.
-- .red[WARNING] you will need a machine with at least 4 cores to run this in a reasonable time 
+- .red-content-box[WARNING] you will need a machine with at least 4 cores to run this in a reasonable time 
 - Using 64 cores the code below ran in 10 minutes.
 
-.code80[
+.small[
 ```
 library(RTransferEntropy)
 library(future)
@@ -717,31 +726,24 @@ class:middle
 ## References
 
 ```
-## [BKM16] D. M. Blei, A. Kucukelbir, and J.
-## D. McAuliffe. "Variational Inference: A
-## Review for Statisticians".  (Jan. 2016).
-## arXiv: 1601.00670 [stat.CO].
+## [BKM16] D. M. Blei, A. Kucukelbir, and J. D. McAuliffe. "Variational
+## Inference: A Review for Statisticians".  (Jan. 2016). arXiv: 1601.00670
+## [stat.CO].
 ## 
-## [Pra18] M. López de Prado. _Advances in
-## Financial Machine Learning_. En. John
-## Wiley &amp; Sons, Feb. 2018.
+## [Pra18] M. López de Prado. _Advances in Financial Machine Learning_.
+## En. John Wiley &amp; Sons, Feb. 2018.
 ## 
-## [Pra20] M. López de Prado. "Machine
-## Learning for Asset Managers". In:
-## _Elements in Quantitative Finance_.
-## Cambridge University Press, Apr. 2020.
+## [Pra20] M. López de Prado. "Machine Learning for Asset Managers". In:
+## _Elements in Quantitative Finance_. Cambridge University Press, Apr.
+## 2020.
 ## 
-## [RS07] D. M. Raymer and D. E. Smith.
-## "Spontaneous knotting of an agitated
-## string". En. In: _Proc. Natl. Acad. Sci.
-## U. S. A._ 104.42 (Oct. 2007), pp.
-## 16432-16437.
+## [RS07] D. M. Raymer and D. E. Smith. "Spontaneous knotting of an
+## agitated string". En. In: _Proc. Natl. Acad. Sci. U. S. A._ 104.42
+## (Oct. 2007), pp. 16432-16437.
 ## 
-## [Sim+19] B. Simon, D. Thomas, P. Franziska
-## J., et al. "RTransferEntropy — Quantifying
-## information flow between different time
-## series using effective transfer entropy".
-## In: _SoftwareX_ 10.100265 (2019), pp. 1-9.
+## [Sim+19] B. Simon, D. Thomas, P. Franziska J., et al. "RTransferEntropy
+## — Quantifying information flow between different time series using
+## effective transfer entropy". In: _SoftwareX_ 10.100265 (2019), pp. 1-9.
 ## URL:
 ## [https://doi.org/10.1016/j.softx.2019.100265](https://doi.org/10.1016/j.softx.2019.100265).
 ```
