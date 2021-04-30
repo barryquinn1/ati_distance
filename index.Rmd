@@ -517,7 +517,7 @@ $$D_{KL}(p,q) \neq D_{KL}(q,p)$$
 ---
 class:middle
 ## Mutual information
-- Mutual information is defined as the decrease in uncertainty [or informational gain) in X that results from the knowing of Y
+- Mutual information is defined as the decrease in uncertainty (informational gain) in X that results from the knowing of Y
 
 $$I(X,Y)=H(X)-H(X|Y)=H(X)+H(Y)-H(X,Y)$$
 - In plain words: .bold[.blue[information gain in X of knowing Y is the sum of the individual marginal entropies reduced by the joint entropy]]
