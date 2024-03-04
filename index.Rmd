@@ -6,7 +6,8 @@ date: "20/12/2019 "
 output:
   xaringan::moon_reader:
     css: ["default", "fonts.css", "mycssblend.css"]
-    self_contained: false # if true, fonts will be stored locally
+    self_contained: true # if true, fonts will be stored locally
+    logo: "img/redlogo.png"
     seal: true # show a title slide with YAML information
     includes:
       in_header: "mathjax-equation-numbers.html"
@@ -40,15 +41,9 @@ xaringanExtra::use_extra_styles(
   hover_code_line = TRUE,         #<<
   mute_unhighlighted_code = TRUE  #<<
 )
-xaringanExtra::use_logo(image_url ="/img/redlogo.png")
 ```
 
-layout: true
-  
-<div class="my-footer"><span>quinference.com</span></div>
 
----
-class:inverse
 ## Outline
 
 .salt[
@@ -368,14 +363,6 @@ class:middle
 - It’s conventional, but not functional. 
 - The logarithms above are natural logs (base e), but changing the base rescales without any effect on inference. Binary logarithms, base 2, are just as common. 
 - As long as all of the entropies you compare use the same base, you’ll be fine.
-
----
-class: middle,center
-background-image: url(img/title-slide-img.png)
-background-size: cover
-# Learning through growth headspace
-
-.fat.center[Focus for study excercise](https://my.headspace.com/play/1257)
 
 ---
 

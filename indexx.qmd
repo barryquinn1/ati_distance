@@ -1,0 +1,186 @@
+---
+title: "Clustering"
+css: "mycssblend.css"
+title-slide-attributes:
+  data-background-image: img/title-slide.png
+  data-background-size: cover
+  data-background-opacity: "0.5"
+format: 
+  revealjs:
+    slideNumber: c/t
+logo: img/qbslogo.png
+editor: visual
+footer: "AI & Trading"
+---
+
+## Outline {.saltinline}
+
+- Distance metrics
+  - Correlation based distance metrics
+- Shannon's entropy
+  - Marginal, conditional, joint
+- Experimental evidence
+- Financial problem investigation
+
+## Distance Metrics {.saltinline .small}
+
+- Many problems in finance require the clustering of variables or observations:
+1. Factor investing, relative value analysis (e.g., forming quality minus junk portfolios)
+2. Risk management, portfolio construction (e.g., deriving the efficient frontier)
+3. Dimensionality reduction (e.g., decomposing bond return drivers)
+4.  Modelling of multicollinear systems (e.g., computing p-values)
+
+## Distance Metrics {.saltinline .small}
+
+So Far We Have Studied...
+
+• The important numerical properties of the empirical correlation (and by extension, 
+covariance) matrix.
+
+**Critical Limitations of Correlation**
+
+• Despite its virtues, correlation suffers from several critical limitations as a 
+measure of codependency.
+
+**Overcoming These Limitations**
+
+• In this lecture, we will overcome these limitations by reviewing information theory concepts that underlie many modern marvels.
+
+**Information Theory Concepts**
+
+• Internet, mobile phones, file compression, video streaming, and 
+encryption.
+
+**Why We Looked Beyond Correlation**
+
+• None of these inventions would have been possible if researchers had not looked beyond correlations to understand codependency.
+
+
+## Claude Shannon's Entropy
+
+🔍 **Information Theory Applications in Finance**
+
+• As it turns out, information theory in general, and the concept of Shannon’s entropy 
+in particular, also have useful applications in finance. 💡
+
+• The key idea behind entropy is to quantify the amount of uncertainty associated with a
+random variable. 🔍
+
+• Information theory is also essential to ML, because the primary goal of many ML 
+algorithms is to reduce the amount of uncertainty involved in the solution to a problem.
+💯
+
+👉 We will see how Shannon's entropy, a key concept in information theory, can help solve real-world financial problems! 📈
+
+## Desirably properties of a distance metric
+
+- In mathematics, a distance function or metric is a generalisation of the concept of physical distance. A metric is a function that defines a distance between each pair of elements of a set.
+
+1. Non-negativity: $d(x, y) \geq 0$
+2. Identity of indiscernibles: $d(x, y) = 0$ if and only if $x = y$
+3. Symmetry: $d(x, y) = d(y, x)$
+4. Triangle inequality: $d(x, y) + d(y, z) \geq d(x, z)$
+
+## Correlation is not a metric
+Consider Two Random Vectors...
+
+• Let X and Y be two random vectors of size T, and a correlation estimate ρ(X,Y), with 
+the only requirement that σ(X,Y) = ρ(X,Y)σ(X)σ(Y).
+
+• σ(X,Y) is the covariance between the two vectors.
+
+• σ(X) and σ(Y) are the standard deviations of X and Y, respectively.
+
+Pearson’s Correlation...
+
+• Pearson’s correlation is one of several correlation estimates that satisfy these 
+requirements.
+
+## Correlation is not a metric
+
+- Pearson's correlation is a measure of the linear relationship between two variables.
+- It is a number between -1 and 1.
+- It does not have the properties of a distance metric.
+- Specifically, it does not satisfy the triangle inequality or non-negativity.
+
+## A correlation-based distance metric
+- The correlation-based distance metric is defined as:
+  $$d(x, y) = \sqrt{2(1 - \rho(x, y))}$$
+  where $\rho(x, y)$ is the correlation between $x$ and $y$.
+
+- This metric does satisfy the properties of a distance metric.
+
+##  Proof{.small}
+
+📝 Euclidean Distance Definition
+
+1. The Euclidean distance between two vectors is defined as:
+
+$$d\left(X,Y\right)=\sqrt{\sum_{t=1}^{T}\left(X_t-Y_t\right)^2}$$
+
+💡 Z-Standardization
+
+2. Z-standardize the vectors so that $x = \left(X - \bar{X}\right)/\sigma\left(X\right)$
+and $y = \left(Y - \bar{Y}\right)/\sigma\left(Y\right)$, where $\bar{.}$ is the mean 
+value.
+
+📈 Correlation Derivation
+
+3. We derive the Euclidean distance $d\left(x,y\right)$:
+
+$$d\left(x,y\right) = \sqrt{\sum_{t=1}^{T}\left(x_t-y_t\right)^2} = 
+\sqrt{T+T=2T\sigma\left(x,y\right)} = \sqrt{4T}d+p(X,Y)$$
+
+🔍 Inheritance of True-Metric Properties
+
+4. This implies that $d_p(X,Y)$ is a linear multiple of the Euclidean distance between 
+the vectors $\left\{X,Y \right\}$ after z-standardization $d(x,y)$, thus inheriting the 
+true-metric properties of the Euclidean distance.
+
+## Properties of Metric $d_p(x,y)$
+
+📝 Normalisation
+
+1. It is normalized, $d_p(X,Y) \in[0,1]$, because $\rho(X,Y) \in[-1,1]$.
+
+🔍 Non-negativity Property
+
+2. It deems more distant two random variables with negative correlation than two random variables with positive correlation, regardless of their absolute value.
+
+💡 Financial Applications
+
+> This property is very useful in finance, for example, we may wish to build a 
+long-only portfolio where holdings in negative-correlated securities can only offset 
+risk and therefore should be treated as different for diversification purposes.
+
+## An Alternative Correlation-Based Distance Metric $d_{|p|}(X,Y)$ {.small}
+
+
+::: columns
+:::: column
+📝 Aim
+
+-  In a long-short portfolio, we often prefer to consider highly negatively correlated 
+securities as similar, because the position sign can override the sign of the 
+correlation. For that case, we can define an alternative normalized correlation-based 
+distance metric:
+
+$$d_{|p|} = \sqrt{1 - | \rho(X,Y) |}$$
+
+💡 Metric Definition
+
+-  This metric is defined as the square root of the absolute value of the correlation between the two vectors minus 1.
+:::
+::: column
+🔍 Advantages
+
+::: {.saltinline}
+* It treats highly negatively correlated securities as similar, which can be useful in a
+long-short portfolio.
+* It is based on the absolute value of the correlation, which can be more intuitive than
+the traditional Euclidean distance metric.
+* It is normalized, meaning that it has a minimum value of 0 and a maximum value of 1, which can make it easier to interpret.
+
+:::
+:::
+:::
