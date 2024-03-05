@@ -1,0 +1,18 @@
+
+Certainly! Here are the rewritten bullet points with improved coherence:
+
+### Exploiting Entropy
+
+* **Entropy**: A measure of disorder or randomness in a system. In information theory, entropy is used to quantify the amount of information in a message or signal.
+	+ **Definition**: Entropy is defined as the average amount of information required to encode a message or signal. The more random or unpredictable the information, the higher the entropy.
+	+ **Units**: Entropy is typically measured in bits, where one bit is the amount of information required to specify one of two equally likely states (e.g., heads or tails for a coin toss).
+* **Entropic inference**: A method of making inferences about a system based on its entropy. The more random or unpredictable the system, the more difficult it is to make accurate inferences.
+	+ **Definition**: Entropic inference is a type of inference that uses the entropy of a system to determine the likelihood of different hypotheses or possibilities. The more entropy in a system, the less confident we can be in any particular hypothesis.
+	+ **Example**: In cryptography, entropic inference can be used to estimate the strength of an encrypted message based on the amount of randomness in the encryption algorithm.
+* **Entropic regularization**: A technique for regularizing machine learning models by adding a term to the loss function that measures the entropy of the model's predictions.
+	+ **Definition**: Entropic regularization adds a penalty term to the loss function based on the average entropy of the model's predictions. The goal is to reduce the entropy of the model's predictions, which can help improve its generalization ability and prevent overfitting.
+	+ **Example**: In natural language processing, entropic regularization can be used to encourage a model to produce more diverse and less predictable output.
+* **Entropic inference in reinforcement learning**: A method of making decisions in reinforcement learning based on the entropy of the environment.
+	+ **Definition**: Entropic inference in reinforcement learning involves using the entropy of the environment to determine the optimal policy for maximizing cumulative reward. The more uncertain or random the environment, the more conservative the decision-making process should be.
+	+ **Example**: In a game of poker, entropic inference could be used to determine the optimal strategy based on the uncertainty of the opponent's hand.
+

@@ -8,9 +8,9 @@
 <link href="indexx_files/libs/quarto-html/light-border.css" rel="stylesheet">
 <link href="indexx_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
 <link href="indexx_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.5.16">
+  <meta name="generator" content="quarto-1.3.450">
 
-  <title>Clustering</title>
+  <title>Distance metrics</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -28,6 +28,71 @@
       margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
       vertical-align: middle;
     }
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </style>
   <link rel="stylesheet" href="indexx_files/libs/revealjs/dist/theme/quarto.css">
   <link rel="stylesheet" href="mycssblend.css">
@@ -156,8 +221,7 @@
   }
 
   .callout.callout-titled .callout-body > .callout-content > :last-child {
-    padding-bottom: 0.5rem;
-    margin-bottom: 0;
+    margin-bottom: 0.5rem;
   }
 
   .callout.callout-titled .callout-icon::before {
@@ -244,6 +308,7 @@
     }
     .reveal .slide:not(.center) {
       height: 100%;
+      overflow-y: auto;
     }
     .reveal .slide.scrollable {
       overflow-y: auto;
@@ -326,7 +391,8 @@
     <div class="slides">
 
 <section id="title-slide" data-background-image="img/title-slide.png" data-background-opacity="0.5" data-background-size="cover" class="quarto-title-block center">
-  <h1 class="title">Clustering</h1>
+  <h1 class="title">Distance metrics</h1>
+  <p class="subtitle">How information theory can help solve real-world financial problems</p>
 
 <div class="quarto-title-authors">
 </div>
@@ -426,7 +492,7 @@
 <p><span class="math display">\[d\left(X,Y\right)=\sqrt{\sum_{t=1}^{T}\left(X_t-Y_t\right)^2}\]</span></p>
 <p>💡 Z-Standardization</p>
 <ol start="2" type="1">
-<li>Z-standardize the vectors so that <span class="math inline">\(x = \left(X - \bar{X}\right)/\sigma\left(X\right)\)</span> and <span class="math inline">\(y = \left(Y - \bar{Y}\right)/\sigma\left(Y\right)\)</span>, where <span class="math inline">\(\bar{.}\)</span> is the mean value.</li>
+<li>Z-standardise the vectors so that <span class="math inline">\(x = \left(X - \bar{X}\right)/\sigma\left(X\right)\)</span> and <span class="math inline">\(y = \left(Y - \bar{Y}\right)/\sigma\left(Y\right)\)</span>, where <span class="math inline">\(\bar{.}\)</span> is the mean value.</li>
 </ol>
 <p>📈 Correlation Derivation</p>
 <ol start="3" type="1">
@@ -478,11 +544,579 @@
 </div>
 </div>
 </div>
-<div class="quarto-auto-generated-content">
-<p><img src="img/qbslogo.png" class="slide-logo"></p>
-<div class="footer footer-default">
-<p>AI &amp; Trading</p>
+</section>
+<section id="entropy-what-is-it" class="slide level2">
+<h2>Entropy: What is it?</h2>
+<ul>
+<li>Entropy is a measure of uncertainty or randomness in a random variable.</li>
+<li>It is a measure of the average amount of information produced by a stochastic source of data.</li>
+<li>It is a measure of the unpredictability of information content.</li>
+<li>It is a measure of the disorder in a system.</li>
+<li>In finance, entropy can be used to measure the uncertainty in the returns of a stock or a portfolio.</li>
+</ul>
+</section>
+<section id="entropy-in-quantitative-finance" class="slide level2 small">
+<h2>Entropy in Quantitative Finance</h2>
+<ul>
+<li>Exploiting entropy is not going to untie the knots, but it can help us solve problems that arise when using the conventional correlation measure in quantitative finance.</li>
+<li>The concept of correlation has three important limitations:</li>
+</ul>
+<ol type="1">
+<li>Firstly, it quantifies the linear codependency between two random variables, but neglects nonlinear relationships.</li>
+<li>Secondly, correlation is highly influenced by outliers.</li>
+<li>Finally, its application beyond the multivariate normal case is questionable.</li>
+</ol>
+</section>
+<section id="entropy-in-quantitative-finance-1" class="slide level2 small">
+<h2>Entropy in Quantitative Finance</h2>
+<ul>
+<li>To overcome these limitations, we need to introduce a few information-theoretic concepts, such as:
+<ul>
+<li>Entropy, which measures the amount of uncertainty or randomness in a system.</li>
+<li>Mutual information, which quantifies the amount of information that one random variable contains about another.</li>
+<li>Conditional entropy, which measures the amount of uncertainty or randomness in one random variable given the value of another.</li>
+<li>Jensen’s inequality, which provides a lower bound on the entropy of a random variable.</li>
+<li>The KL divergence, which measures the difference between two probability distributions.</li>
+</ul></li>
+</ul>
+</section>
+<section id="entropy-and-the-challenge-of-measuring-accuracy" class="slide level2">
+<h2>Entropy and the challenge of measuring accuracy</h2>
+<ul>
+<li>Information theory provides a natural measurement scale for distance between two probability distributions</li>
+<li>Need to establish deviance as an approximation of relative distance from perfect accuracy</li>
+</ul>
+</section>
+<section id="desirable-properties-of-good-uncertainty-measure" class="slide level2">
+<h2>Desirable properties of good uncertainty measure</h2>
+<ul>
+<li>Measure should be continuous</li>
+<li>Should increase as the number of possible events increases</li>
+<li>Should be additive</li>
+</ul>
+</section>
+<section id="information-entropy" class="slide level2">
+<h2>Information entropy</h2>
+<ul>
+<li>Definition: -E(log(p_i))= -∑(p_i) log(p_i)</li>
+<li>Intuitive explanation: uncertainty contained in a probability distribution is the average log-probability of an event</li>
+<li>Viewed as the expected value of these surprises</li>
+<li>Accepted as a useful measure of uncertainty not because of premises that lead to it, but rather because it has turned out to be so useful and productive</li>
+</ul>
+</section>
+<section id="practical-applications-of-entropy" class="slide level2">
+<h2>Practical applications of entropy</h2>
+<ul>
+<li>Lets calculate the information entropy for the weather tomorrow</li>
+<li>Suppose the true probabilities of rain and shine are <span class="math inline">\(p_1=0.3\)</span> and <span class="math inline">\(p_2=0.7\)</span>, respectively. Then: <span class="math display">\[H(p)=-(p_1 log(p_1)+p_2 log(p_2)) \approx 0.61\]</span></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>p <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.3</span>,<span class="fl">0.7</span>)</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="sc">-</span><span class="fu">sum</span>(p<span class="sc">*</span><span class="fu">log</span>(p))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.6108643</code></pre>
 </div>
+</div>
+</section>
+<section id="practical-applications-of-entropy-1" class="slide level2">
+<h2>Practical applications of entropy</h2>
+<ul>
+<li>Suppose instead we live in Abu Dhabi</li>
+<li>Then the probabilities of rain and shine might be more like <span class="math inline">\(p_1=0.01\)</span> and <span class="math inline">\(p_2=0.99\)</span></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>p <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.01</span>,<span class="fl">0.99</span>)</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="sc">-</span><span class="fu">sum</span>(p<span class="sc">*</span><span class="fu">log</span>(p))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.05600153</code></pre>
+</div>
+</div>
+</section>
+<section id="practical-applications-of-entropy-2" class="slide level2">
+<h2>Practical applications of entropy</h2>
+<ul>
+<li>now the entropy would be approximately 0.06</li>
+<li>Why has the uncertainty decreased?</li>
+</ul>
+<div class="fragment">
+<ul>
+<li>Because in Abu Dhabi it hardly ever rains.</li>
+<li>Therefore there’s much less uncertainty about any given day, compared to a place in which it rains 30% of the time.</li>
+<li>It’s in this way that information entropy measures the uncertainty inherent in a distribution of events.</li>
+</ul>
+</div>
+</section>
+<section id="entropy-and-forecasting-complexity" class="slide level2">
+<h2>Entropy and forecasting complexity</h2>
+<ul>
+<li>Similarly, if we add another kind of event to the distribution,forecasting into winter, so also predicting snow, entropy tends to increase, due the added dimensionality of the prediction problem.</li>
+<li>Similarly, if we add another kind of event to the distribution, .blue[forecasting into winter, so also predicting snow], entropy tends to increase, due the added dimensionality of the prediction problem.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>p<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="fl">0.7</span>,<span class="fl">0.15</span>,<span class="fl">0.15</span>)</span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="sc">-</span><span class="fu">sum</span>(p<span class="sc">*</span><span class="fu">log</span>(p))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.8188085</code></pre>
+</div>
+</div>
+<ul>
+<li>Then entropy is about 0.82</li>
+</ul>
+</section>
+<section id="entropy-definition" class="slide level2">
+<h2>Entropy Definition</h2>
+<ul>
+<li>The definition of entropy is <span class="math inline">\(-\sum_{x \in S} p(x) log(p(x))\)</span>, where <span class="math inline">\(S\)</span> is the sample space of the random variable.</li>
+<li>This formula assumes that the events are mutually exclusive and exhaustive, which may not always be the case in real-world scenarios.</li>
+</ul>
+</section>
+<section id="logarithms" class="slide level2">
+<h2>Logarithms</h2>
+<ul>
+<li>The logarithms used in entropy calculations can be either natural logs (base e) or binary logs (base 2).</li>
+<li>However, it’s important to note that different bases can lead to different interpretations of entropy.</li>
+<li>When comparing entropies across different random variables, it’s essential to use the same base.</li>
+</ul>
+</section>
+<section id="zero-probability-events" class="slide level2">
+<h2>Zero Probability Events</h2>
+<ul>
+<li><span class="math inline">\(log(0) = \infty\)</span>, which means that events with probability 0 contribute nothing to the entropy.</li>
+<li>To avoid any inconsistencies, we set <span class="math inline">\(log(0) = 0\)</span> when computing entropy.</li>
+</ul>
+</section>
+<section id="joint-entropy" class="slide level2">
+<h2>Joint Entropy</h2>
+<ul>
+<li>The joint entropy of two random variables X and Y is <span class="math inline">\(-\sum_{x,y \in S_X,S_Y} p(x,y) log(p(x,y))\)</span>, where <span class="math inline">\(S_X\)</span> and <span class="math inline">\(S_Y\)</span> are the sample spaces of X and Y, respectively.</li>
+<li>This formula assumes that the events are mutually exclusive and exhaustive.</li>
+</ul>
+</section>
+<section id="properties-of-joint-entropy" class="slide level2">
+<h2>Properties of Joint Entropy</h2>
+<ul>
+<li>Non-negativity: <span class="math inline">\(H(X,Y) \ge 0\)</span>.</li>
+<li>Symmetry: <span class="math inline">\(H(X,Y) = H(Y,X)\)</span>.</li>
+<li>Greater than individual entropies: <span class="math inline">\(H(X,Y) \ge max(H(X),H(Y))\)</span>.</li>
+<li>Less than or equal to the sum of individual entropies: <span class="math inline">\(H(X,Y) \le H(X) + H(Y)\)</span>.</li>
+</ul>
+<p>Certainly! Here’s how you could structure the explanation of calculating joint entropy between two financial assets using R, formatted as a series of Markdown slides for a presentation.</p>
+</section>
+<section id="calculating-joint-entropy-in-finance-with-r" class="slide level2">
+<h2>Calculating Joint Entropy in Finance with R</h2>
+<ul>
+<li>Joint entropy quantifies the uncertainty in a joint distribution of two random variables.</li>
+<li>Useful for analyzing the combined behavior of financial market variables.</li>
+<li>We’ll demonstrate using simulated asset returns.</li>
+</ul>
+</section>
+<section id="setup-in-r" class="slide level2">
+<h2>Setup in R</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="co"># Ensure the infotheo package is installed and loaded</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">requireNamespace</span>(<span class="st">"infotheo"</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>)) <span class="fu">install.packages</span>(<span class="st">"infotheo"</span>)</span>
+<span id="cb7-3"><a href="#cb7-3"></a><span class="fu">library</span>(infotheo)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="simulating-asset-returns" class="slide level2">
+<h2>Simulating Asset Returns</h2>
+<ul>
+<li>Simulate daily returns for two hypothetical financial assets.</li>
+<li>Assume normally distributed returns for simplicity.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>) <span class="co"># Ensuring reproducibility</span></span>
+<span id="cb8-2"><a href="#cb8-2"></a>returns_asset1 <span class="ot">=</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="at">mean =</span> <span class="fl">0.001</span>, <span class="at">sd =</span> <span class="fl">0.01</span>) <span class="co"># Asset 1 returns</span></span>
+<span id="cb8-3"><a href="#cb8-3"></a>returns_asset2 <span class="ot">=</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="at">mean =</span> <span class="fl">0.001</span>, <span class="at">sd =</span> <span class="fl">0.02</span>) <span class="co"># Asset 2 returns</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="discretizing-returns" class="slide level2">
+<h2>Discretizing Returns</h2>
+<ul>
+<li>Discretization is necessary for calculating entropy.</li>
+<li>The choice of bins is crucial and can affect the outcome.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>bins <span class="ot">=</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="fu">min</span>(<span class="fu">c</span>(returns_asset1, returns_asset2)), <span class="at">to =</span> <span class="fu">max</span>(<span class="fu">c</span>(returns_asset1, returns_asset2)), <span class="at">length.out =</span> <span class="dv">10</span>)</span>
+<span id="cb9-2"><a href="#cb9-2"></a>discrete_returns1 <span class="ot">=</span> <span class="fu">cut</span>(returns_asset1, <span class="at">breaks =</span> bins, <span class="at">labels =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb9-3"><a href="#cb9-3"></a>discrete_returns2 <span class="ot">=</span> <span class="fu">cut</span>(returns_asset2, <span class="at">breaks =</span> bins, <span class="at">labels =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="calculating-joint-entropy" class="slide level2">
+<h2>Calculating Joint Entropy</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="co"># Calculate mutual information (and hence joint entropy)</span></span>
+<span id="cb10-2"><a href="#cb10-2"></a>joint_entropy <span class="ot">=</span> <span class="fu">mutinformation</span>(discrete_returns1, discrete_returns2, <span class="at">method =</span> <span class="st">"emp"</span>)</span>
+<span id="cb10-3"><a href="#cb10-3"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"Joint entropy (natural log base):"</span>, joint_entropy))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Joint entropy (natural log base): 0.194283857148803"</code></pre>
+</div>
+</div>
+<ul>
+<li>If you specifically need the entropy value in bits, you can manually convert the output from natural logarithm to log base 2 by dividing the result by <code>log(2)</code>:</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="co"># Convert the result to bits</span></span>
+<span id="cb12-2"><a href="#cb12-2"></a>joint_entropy_bits <span class="ot">=</span> joint_entropy <span class="sc">/</span> <span class="fu">log</span>(<span class="dv">2</span>)</span>
+<span id="cb12-3"><a href="#cb12-3"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"Joint entropy (in bits):"</span>, joint_entropy_bits))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Joint entropy (in bits): 0.280292357233359"</code></pre>
+</div>
+</div>
+<ul>
+<li>Joint entropy provides insights into the information contained within the combined behavior of two financial assets.</li>
+<li>This example used simulated data and basic discretization for illustration.</li>
+</ul>
+</section>
+<section id="economic-interpretation-of-joint-entropy-in-finance" class="slide level2">
+<h2>Economic Interpretation of Joint Entropy in Finance</h2>
+<ul>
+<li><strong>Complexity of Asset Relationships:</strong> A joint entropy of 0.280292357233359 bits suggests a moderate level of unpredictability and complexity in the relationship between the two assets’ returns. This indicates some degree of informational efficiency but also room for diversification.</li>
+<li><strong>Market Behaviour:</strong> The specific value reflects the combined information content and interdependency of the assets under study, implying that while they share some information, each still possesses unique characteristics.</li>
+</ul>
+</section>
+<section id="strategic-implications" class="slide level2">
+<h2>Strategic Implications</h2>
+<ul>
+<li><strong>Diversification Benefits:</strong> The calculated joint entropy value points towards potential diversification benefits. It suggests that the assets’ price movements are not perfectly correlated, which can help in reducing overall portfolio volatility.</li>
+<li><strong>Risk Management and Investment Decisions:</strong> This joint entropy value should inform risk management strategies by highlighting the importance of considering the complexity and predictability of asset returns. Investors should use this alongside other analyses for a comprehensive investment strategy.</li>
+</ul>
+</section>
+<section id="understanding-entropy-in-finance" class="slide level2">
+<h2>Understanding Entropy in Finance</h2>
+<ul>
+<li><strong>Conditional Entropy:</strong>
+<ul>
+<li>Formula: (H(X|Y) = H(X,Y) - H(Y))</li>
+<li>Represents the expected uncertainty in one variable ((X)) given the knowledge of another ((Y)). Essential for modeling predictability in financial markets.</li>
+</ul></li>
+<li><strong>Maximum Entropy (MaxEnt):</strong>
+<ul>
+<li>Approach: Maximize (H(X)) subject to known constraints.</li>
+<li>Identifies the least presumptive probability distributions based on known information, central to Bayesian inference and machine learning.</li>
+</ul></li>
+</ul>
+</section>
+<section id="divergence-and-its-financial-significance" class="slide level2">
+<h2>Divergence and Its Financial Significance</h2>
+<ul>
+<li><strong>Kullback-Leibler (KL) Divergence:</strong>
+<ul>
+<li>Formula: (D_{KL}(p, q) = _i p_i ())</li>
+<li>Measures the extra uncertainty induced when using distribution (q) to approximate (p), crucial for assessing model accuracy.</li>
+</ul></li>
+<li><strong>Cross-Entropy:</strong>
+<ul>
+<li>Formula: (H_c(p, q) = -_{xS_X}p(x) (q(x)))</li>
+<li>Highlights the discrepancy between the true distribution ((p)) and the predicted one ((q)), essential for evaluating classification models in finance.</li>
+</ul></li>
+</ul>
+</section>
+<section id="mutual-information-and-strategic-insights" class="slide level2">
+<h2>Mutual Information and Strategic Insights</h2>
+<ul>
+<li><strong>Mutual Information:</strong>
+<ul>
+<li>Formula: (I(X;Y) = H(X) - H(X|Y) = H(X) + H(Y) - H(X,Y))</li>
+<li>Quantifies the informational gain in variable (X) from knowing (Y), demonstrating the value of shared information between financial variables for strategic decision-making.</li>
+</ul></li>
+</ul>
+</section>
+<section id="implications-for-financial-machine-learning" class="slide level2">
+<h2>Implications for Financial Machine Learning</h2>
+<ul>
+<li><strong>Model Selection and Evaluation:</strong> Theoretical concepts like divergence and cross-entropy help in selecting and evaluating models based on their fidelity to true market behaviors and predictive capabilities.</li>
+<li><strong>Strategic Decision-Making:</strong> Insights from mutual information and maximum entropy support financial practitioners in crafting robust investment strategies, managing risk, and optimizing portfolios with a principled understanding of market uncertainty.</li>
+</ul>
+</section>
+<section id="practical-financial-example" class="slide level2">
+<h2>Practical financial example</h2>
+<ul>
+<li>First, we install and load the <code>quantmod</code> package, then download stock data for AAPL and MSFT.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="co">#install.packages("quantmod")</span></span>
+<span id="cb14-2"><a href="#cb14-2"></a><span class="fu">library</span>(quantmod)</span>
+<span id="cb14-3"><a href="#cb14-3"></a></span>
+<span id="cb14-4"><a href="#cb14-4"></a><span class="co"># Specify the stocks and time period</span></span>
+<span id="cb14-5"><a href="#cb14-5"></a>stocks <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"AAPL"</span>, <span class="st">"MSFT"</span>)</span>
+<span id="cb14-6"><a href="#cb14-6"></a>start_date <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(<span class="st">"2020-01-01"</span>)</span>
+<span id="cb14-7"><a href="#cb14-7"></a>end_date <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(<span class="st">"2020-12-31"</span>)</span>
+<span id="cb14-8"><a href="#cb14-8"></a></span>
+<span id="cb14-9"><a href="#cb14-9"></a><span class="co"># Download stock data</span></span>
+<span id="cb14-10"><a href="#cb14-10"></a><span class="fu">getSymbols</span>(stocks, <span class="at">from=</span>start_date, <span class="at">to=</span>end_date, <span class="at">auto.assign =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "AAPL" "MSFT"</code></pre>
+</div>
+</div>
+</section>
+<section id="calculate-daily-returns" class="slide level2">
+<h2>Calculate Daily Returns</h2>
+<p>Next, we calculate the daily returns for each stock.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>returns_aapl <span class="ot">&lt;-</span> <span class="fu">dailyReturn</span>(AAPL)</span>
+<span id="cb16-2"><a href="#cb16-2"></a>returns_msft <span class="ot">&lt;-</span> <span class="fu">dailyReturn</span>(MSFT)</span>
+<span id="cb16-3"><a href="#cb16-3"></a><span class="co">#add both plots together</span></span>
+<span id="cb16-4"><a href="#cb16-4"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">1</span>))</span>
+<span id="cb16-5"><a href="#cb16-5"></a><span class="fu">plot</span>(returns_aapl, <span class="at">main =</span> <span class="st">"AAPL Daily Returns"</span>)</span>
+<span id="cb16-6"><a href="#cb16-6"></a><span class="fu">plot</span>(returns_msft, <span class="at">main =</span> <span class="st">"MSFT Daily Returns"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="indexx_files/figure-revealjs/unnamed-chunk-10-1.png" width="960" class="r-stretch"><div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"Linear correlation (in bits):"</span>, <span class="fu">cor</span>(returns_aapl,returns_msft)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Linear correlation (in bits): 0.839278219328719"</code></pre>
+</div>
+</div>
+</section>
+<section id="discretize-returns-and-calculate-information-measures" class="slide level2">
+<h2>Discretize Returns and Calculate Information Measures</h2>
+<p>To apply the <code>infotheo</code> functions, we need to discretize the returns. Then, we calculate the conditional entropy and mutual information.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="fu">library</span>(infotheo)</span>
+<span id="cb19-2"><a href="#cb19-2"></a></span>
+<span id="cb19-3"><a href="#cb19-3"></a><span class="co"># Discretise returns</span></span>
+<span id="cb19-4"><a href="#cb19-4"></a>discretized_aapl <span class="ot">&lt;-</span> <span class="fu">discretize</span>(<span class="fu">as.numeric</span>(returns_aapl))</span>
+<span id="cb19-5"><a href="#cb19-5"></a>discretized_msft <span class="ot">&lt;-</span> <span class="fu">discretize</span>(<span class="fu">as.numeric</span>(returns_msft))</span>
+<span id="cb19-6"><a href="#cb19-6"></a></span>
+<span id="cb19-7"><a href="#cb19-7"></a><span class="co"># Mutual Information between AAPL and MSFT returns</span></span>
+<span id="cb19-8"><a href="#cb19-8"></a>mutual_info <span class="ot">&lt;-</span> <span class="fu">mutinformation</span>(discretized_aapl, discretized_msft, <span class="at">method =</span> <span class="st">"emp"</span>)</span>
+<span id="cb19-9"><a href="#cb19-9"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"Mutual Information between AAPL and MSFT:"</span>, mutual_info))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Mutual Information between AAPL and MSFT: 0.516904960511519"</code></pre>
+</div>
+</div>
+</section>
+<section id="variation-of-information" class="slide level2">
+<h2>Variation of Information</h2>
+<ul>
+<li>The Variation of Information (VI) measure, also known as shared information distance, is a metric used in information theory to quantify the distance or dissimilarity between two random variables or between two clusterings.</li>
+<li>It combines the concepts of mutual information and entropy to measure how much two variables or clusterings differ in terms of their information content.</li>
+</ul>
+</section>
+<section id="overview-of-variation-of-information-vi" class="slide level2">
+<h2>Overview of Variation of Information (VI)</h2>
+<ul>
+<li><strong>Definition:</strong> A metric that quantifies the dissimilarity between two random variables or clusterings by combining mutual information (I) and entropy (H).</li>
+<li><strong>Formula:</strong> (VI(X, Y) = H(X) + H(Y) - 2I(X; Y))</li>
+<li><strong>Interpretation:</strong> Measures the total amount of uncertainty or information that is unique to each of the variables (X) and (Y), not shared between them.</li>
+</ul>
+</section>
+<section id="significance-in-finance" class="slide level2">
+<h2>Significance in Finance</h2>
+<ul>
+<li><strong>Cluster Analysis:</strong> Used to evaluate the similarity between different financial market segmentations or clustering of assets based on returns, volatility, or other characteristics.</li>
+<li><strong>Time Series Analysis:</strong> Helps in comparing the informational content of different financial time series, such as stock prices or economic indicators.</li>
+<li><strong>Risk Management:</strong> Assists in identifying diversification opportunities by quantifying the dissimilarity in information content between asset returns.</li>
+</ul>
+</section>
+<section id="applications" class="slide level2">
+<h2>Applications</h2>
+<ul>
+<li><strong>Portfolio Optimization:</strong> Analyzing the variation of information between asset returns to optimize portfolio diversification and risk-adjusted returns.</li>
+<li><strong>Market Segmentation:</strong> Evaluating the effectiveness of market segmentation strategies by measuring the dissimilarity in information content across segments.</li>
+<li><strong>Economic Analysis:</strong> Comparing economic indicators to understand the unique and shared information contributing to economic forecasts.</li>
+</ul>
+</section>
+<section id="benefits-and-challenges" class="slide level2">
+<h2>Benefits and Challenges</h2>
+<div class="columns">
+<div class="column">
+<h4 id="benefits">Benefits</h4>
+<ul>
+<li><strong>Quantitative Measure:</strong> Provides a clear, quantitative metric to assess dissimilarity in information content.</li>
+<li><strong>Insightful:</strong> Offers deeper insights into the structure and dynamics of financial markets.</li>
+<li><strong>Decision Support:</strong> Aids in making informed decisions by highlighting differences in informational content between variables.</li>
+</ul>
+</div><div class="column">
+<h4 id="challenges">Challenges</h4>
+<ul>
+<li><strong>Data Intensive:</strong> Requires comprehensive data for accurate calculation and interpretation.</li>
+<li><strong>Complexity:</strong> Understanding and applying VI can be complex, requiring a solid foundation in information theory.</li>
+<li><strong>Interpretation:</strong> Interpreting the results of VI analysis in the context of financial decision-making can be challenging.</li>
+</ul>
+<hr>
+</div>
+</div>
+</section>
+<section id="tldr" class="slide level2 small">
+<h2>TL;DR</h2>
+<table>
+<colgroup>
+<col style="width: 10%">
+<col style="width: 15%">
+<col style="width: 17%">
+<col style="width: 32%">
+<col style="width: 24%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Metric</th>
+<th>Definition</th>
+<th>Relationship</th>
+<th>Applications in Finance</th>
+<th>Metric Properties</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Entropy (H)</td>
+<td>Measures the uncertainty or unpredictability of a variable’s outcome.</td>
+<td>Fundamental to all other metrics as a measure of uncertainty.</td>
+<td>Quantifying the unpredictability of financial variables such as asset returns, market volatility.</td>
+<td><strong>No</strong>, entropy is not a distance measure and does not satisfy metric properties.</td>
+</tr>
+<tr class="even">
+<td>Mutual Information (I)</td>
+<td>Measures the amount of information shared between two variables; how much knowing one reduces uncertainty about the other.</td>
+<td>Relates to entropy by quantifying the reduction in uncertainty.</td>
+<td>Analyzing dependencies between financial variables, identifying market trends.</td>
+<td><strong>No</strong>, mutual information is not a distance measure; it lacks symmetry and the triangle inequality for distances.</td>
+</tr>
+<tr class="odd">
+<td>Conditional Entropy (H(X|Y))</td>
+<td>Quantifies the remaining uncertainty in one variable when the state of another is known.</td>
+<td>Derived from entropy, showing the reduction in uncertainty given another variable.</td>
+<td>Assessing predictability of financial variables given others.</td>
+<td><strong>No</strong>, conditional entropy is directional and does not satisfy symmetry or the triangle inequality.</td>
+</tr>
+<tr class="even">
+<td>Cross-Entropy (Hc)</td>
+<td>Measures the expected number of bits needed to identify an event from a set, based on a different probability distribution.</td>
+<td>Incorporates KL divergence when comparing two distributions.</td>
+<td>Evaluating performance of predictive models in finance.</td>
+<td><strong>No</strong>, cross-entropy is not symmetric and does not satisfy the triangle inequality.</td>
+</tr>
+<tr class="odd">
+<td>Kullback-Leibler Divergence (D_{KL})</td>
+<td>Quantifies the difference between two probability distributions.</td>
+<td>Measures the information gain from one distribution to another.</td>
+<td>Measuring the discrepancy between model predictions and actual data.</td>
+<td><strong>No</strong>, KL divergence is not symmetric and does not satisfy the triangle inequality.</td>
+</tr>
+<tr class="even">
+<td>Variation of Information (VI)</td>
+<td>A metric to quantify the dissimilarity between two random variables or clusterings.</td>
+<td>Combines entropy and mutual information to measure total unique information.</td>
+<td>Comparing financial market segmentations, understanding diversification.</td>
+<td><strong>Yes</strong>, variation of information is a true metric as it satisfies non-negativity, identity of indiscernibles, symmetry, and the triangle inequality.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="experimental-evidence" class="slide level2">
+<h2>Experimental evidence</h2>
+<p>To calculate the Variation of Information (VI) in R and compare it with linear correlation, especially emphasizing the differences in detecting non-linear relationships, we’ll first simulate data to create an exaggerated non-linear relationship. Then, we’ll calculate both the Pearson correlation coefficient (a measure of linear correlation) and the Variation of Information.</p>
+<p>First, let’s simulate the data:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>) <span class="co"># Ensure reproducibility</span></span>
+<span id="cb21-2"><a href="#cb21-2"></a>x <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">10</span>, <span class="dv">10</span>, <span class="at">by =</span> <span class="fl">0.1</span>)</span>
+<span id="cb21-3"><a href="#cb21-3"></a>y <span class="ot">&lt;-</span> <span class="fu">sin</span>(x)<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="fu">length</span>(x), <span class="at">sd =</span> <span class="fl">0.1</span>) <span class="co"># Non-linear relationship with added noise</span></span>
+<span id="cb21-4"><a href="#cb21-4"></a><span class="fu">plot</span>(x, y, <span class="at">main =</span> <span class="st">"Simulated Non-linear Relationship"</span>, <span class="at">xlab =</span> <span class="st">"X"</span>, <span class="at">ylab =</span> <span class="st">"Y"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+</div>
+<img data-src="indexx_files/figure-revealjs/unnamed-chunk-13-1.png" width="960" class="r-stretch"><h3 id="calculating-pearson-correlation-in-r">Calculating Pearson Correlation in R</h3>
+<p>The Pearson correlation can be directly calculated using the <code>cor()</code> function:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a>linear_correlation <span class="ot">&lt;-</span> <span class="fu">cor</span>(x, y)</span>
+<span id="cb22-2"><a href="#cb22-2"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"Linear Correlation:"</span>, linear_correlation))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Linear Correlation: -0.00696311389621414"</code></pre>
+</div>
+</div>
+<h3 id="calculating-variation-of-information-in-r">Calculating Variation of Information in R</h3>
+<p>Calculating the Variation of Information (VI) in R for continuous variables directly is not as straightforward because it typically requires the variables to be discretized or involves estimating their joint and individual entropies. Since there’s no built-in function for VI in base R or common packages, we’ll need to implement it. This involves discretizing the data, calculating the entropies, and then using the VI formula.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a><span class="fu">library</span>(entropy) <span class="co"># Load the infotheo package for entropy and mutual information calculations</span></span>
+<span id="cb24-2"><a href="#cb24-2"></a>x_disc <span class="ot">&lt;-</span> <span class="fu">discretize</span>(x,<span class="at">numBins =</span> <span class="dv">20</span>) <span class="co"># Discretize x into 10 bins</span></span>
+<span id="cb24-3"><a href="#cb24-3"></a>y_disc <span class="ot">&lt;-</span> <span class="fu">discretize</span>(y, <span class="at">numBins=</span><span class="dv">20</span>) <span class="co"># Discretize y into 10 bins</span></span>
+<span id="cb24-4"><a href="#cb24-4"></a></span>
+<span id="cb24-5"><a href="#cb24-5"></a><span class="co"># Convert discretized data to numeric indices</span></span>
+<span id="cb24-6"><a href="#cb24-6"></a>x_bins <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">factor</span>(x_disc))</span>
+<span id="cb24-7"><a href="#cb24-7"></a>y_bins <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">factor</span>(y_disc))</span>
+<span id="cb24-8"><a href="#cb24-8"></a></span>
+<span id="cb24-9"><a href="#cb24-9"></a><span class="co"># Create contingency table for joint distribution</span></span>
+<span id="cb24-10"><a href="#cb24-10"></a>joint_distribution <span class="ot">&lt;-</span> <span class="fu">table</span>(x_bins, y_bins)</span>
+<span id="cb24-11"><a href="#cb24-11"></a></span>
+<span id="cb24-12"><a href="#cb24-12"></a><span class="co"># Calculate individual entropies</span></span>
+<span id="cb24-13"><a href="#cb24-13"></a>H_x <span class="ot">&lt;-</span> <span class="fu">entropy</span>(<span class="fu">table</span>(x_bins))</span>
+<span id="cb24-14"><a href="#cb24-14"></a>H_y <span class="ot">&lt;-</span> <span class="fu">entropy</span>(<span class="fu">table</span>(y_bins))</span>
+<span id="cb24-15"><a href="#cb24-15"></a></span>
+<span id="cb24-16"><a href="#cb24-16"></a><span class="co"># Calculate joint entropy</span></span>
+<span id="cb24-17"><a href="#cb24-17"></a>H_xy <span class="ot">&lt;-</span> <span class="fu">entropy</span>(joint_distribution)</span>
+<span id="cb24-18"><a href="#cb24-18"></a></span>
+<span id="cb24-19"><a href="#cb24-19"></a><span class="co"># Calculate mutual information</span></span>
+<span id="cb24-20"><a href="#cb24-20"></a>I_xy <span class="ot">&lt;-</span> H_x <span class="sc">+</span> H_y <span class="sc">-</span> H_xy</span>
+<span id="cb24-21"><a href="#cb24-21"></a></span>
+<span id="cb24-22"><a href="#cb24-22"></a><span class="co"># Calculate Variation of Information</span></span>
+<span id="cb24-23"><a href="#cb24-23"></a>VI <span class="ot">&lt;-</span> H_x <span class="sc">+</span> H_y <span class="sc">-</span> <span class="dv">2</span> <span class="sc">*</span> I_xy</span>
+<span id="cb24-24"><a href="#cb24-24"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"Variation of Information:"</span>, VI))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Variation of Information: 2.23006570879938"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a><span class="co"># For the Pearson correlation, no change is needed</span></span>
+<span id="cb26-2"><a href="#cb26-2"></a>linear_correlation <span class="ot">&lt;-</span> <span class="fu">cor</span>(x, y)</span>
+<span id="cb26-3"><a href="#cb26-3"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"Linear Correlation:"</span>, linear_correlation))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Linear Correlation: -0.00696311389621414"</code></pre>
+</div>
+</div>
+</section>
+<section id="normalized-variation-of-information" class="slide level2">
+<h2>Normalized Variation of Information</h2>
+<ul>
+<li><p>One common approach is to normalize VI by the joint entropy H(X,Y)H(X,Y) or by the sum of the individual entropies H(X)+H(Y)H(X)+H(Y), depending on the context and what aspect of the data you’re most interested in:</p></li>
+<li><p>Normalized VI=VI(X,Y)H(X)+H(Y)Normalized VI=H(X)+H(Y)VI(X,Y)​</p></li>
+<li><p>This normalization ensures that the VI lies between 0 and 1, where 0 indicates that the two variables share all their information (identical distributions) and 1 indicates that the two variables share no information.</p></li>
+</ul>
+</section>
+<section id="normalized-variation-of-information-in-r" class="slide level2">
+<h2>Normalized Variation of Information in R</h2>
+<ul>
+<li>Let’s continue from the previous example, assuming <code>H_x</code>, <code>H_y</code>, and <code>I_xy</code> (mutual information) have already been calculated:</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a><span class="co"># Assuming H_x, H_y, and I_xy have already been calculated</span></span>
+<span id="cb28-2"><a href="#cb28-2"></a></span>
+<span id="cb28-3"><a href="#cb28-3"></a><span class="co"># Calculate Variation of Information (VI) again for clarity</span></span>
+<span id="cb28-4"><a href="#cb28-4"></a>VI <span class="ot">&lt;-</span> H_x <span class="sc">+</span> H_y <span class="sc">-</span> <span class="dv">2</span> <span class="sc">*</span> I_xy</span>
+<span id="cb28-5"><a href="#cb28-5"></a></span>
+<span id="cb28-6"><a href="#cb28-6"></a><span class="co"># Normalize VI to range between 0 and 1</span></span>
+<span id="cb28-7"><a href="#cb28-7"></a><span class="co"># Normalized VI is VI divided by the sum of the individual entropies (max possible VI)</span></span>
+<span id="cb28-8"><a href="#cb28-8"></a>Normalized_VI <span class="ot">&lt;-</span> VI <span class="sc">/</span> (H_x <span class="sc">+</span> H_y)</span>
+<span id="cb28-9"><a href="#cb28-9"></a></span>
+<span id="cb28-10"><a href="#cb28-10"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"Variation of Information:"</span>, VI))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Variation of Information: 2.23006570879938"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"Normalized Variation of Information:"</span>, Normalized_VI))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Normalized Variation of Information: 0.896160537565619"</code></pre>
+</div>
+</div>
+<p>::: ::: column #### Interpretation - <strong>Variation of Information (VI):</strong> Provides a measure of the total unique and shared information between two variables. A lower value indicates more shared information, while a higher value indicates less shared information and more uniqueness. - <strong>Normalized Variation of Information:</strong> Adjusts VI into a 0 to 1 scale, where 0 indicates perfect agreement (identical information content) and 1 indicates complete disagreement (no shared information). This normalization makes it easier to interpret the degree of dissimilarity between the variables. ::: :::</p>
+</section>
+<section id="practical-advice" class="slide level2">
+<h2>Practical Advice</h2>
+<ul>
+<li>This normalization technique does not change the essence of what VI measures but scales its output to a more interpretable range, especially useful when comparing across different pairs of variables or datasets. Remember, this normalized VI still does not indicate directionality or the type of relationship (linear or non-linear) between the variables, unlike correlation coefficients.</li>
+</ul>
+</section>
+<section id="explaining-the-results" class="slide level2">
+<h2>Explaining the Results</h2>
+<ul>
+<li><p>This example simulates a non-linear relationship between (x) and (y), calculates the linear correlation to show its limitation in capturing non-linear dependencies, and calculates the Variation of Information, which is not limited to linear relationships and can capture the total amount of shared and unique information between the variables.</p></li>
+<li><p>The Pearson correlation coefficient might be low or not significant because it only measures linear relationships. In contrast, the Variation of Information could be higher, reflecting the complexity of the non-linear relationship that the linear correlation fails to capture.</p></li>
+</ul>
+</section>
+<section id="limitation-and-consideration" class="slide level2">
+<h2>Limitation and Consideration</h2>
+<ul>
+<li>When working with continuous data, the discretization process can significantly impact the results of information-theoretic measures. The choice of binning method (“fd” in this case) and the number of bins can influence the entropy and mutual information calculations, and thereby the Variation of Information. It’s crucial to experiment with these parameters and understand their effects on your analysis.</li>
+</ul>
+
+<img src="img/qbslogo.png" class="slide-logo r-stretch"><div class="footer footer-default">
+<p>AI &amp; Trading</p>
 </div>
 </section>
     </div>
@@ -511,6 +1145,7 @@
       Reveal.initialize({
 'controlsAuto': true,
 'previewLinksAuto': false,
+'smaller': false,
 'pdfSeparateFragments': false,
 'autoAnimateEasing': "ease",
 'autoAnimateDuration': 1,
@@ -695,6 +1330,44 @@
         ]
       });
     </script>
+    
+    <script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        // dispatch for htmlwidgets
+        function fireSlideEnter() {
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
+        }
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+          fireSlideEnter();
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
+          }
+        }
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+          });
+        }
+
+      })();
+    </script>
+
     <script id="quarto-html-after-body" type="application/javascript">
     window.document.addEventListener("DOMContentLoaded", function (event) {
       const toggleBodyColorMode = (bsSheetEl) => {
@@ -771,9 +1444,10 @@
         // clear code selection
         e.clearSelection();
       });
-      function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      function tippyHover(el, contentFn) {
         const config = {
           allowHTML: true,
+          content: contentFn,
           maxWidth: 500,
           delay: 100,
           arrow: false,
@@ -783,17 +1457,8 @@
           interactive: true,
           interactiveBorder: 10,
           theme: 'light-border',
-          placement: 'bottom-start',
+          placement: 'bottom-start'
         };
-        if (contentFn) {
-          config.content = contentFn;
-        }
-        if (onTriggerFn) {
-          config.onTrigger = onTriggerFn;
-        }
-        if (onUntriggerFn) {
-          config.onUntrigger = onUntriggerFn;
-        }
           config['offset'] = [0,0];
           config['maxWidth'] = 700;
         window.tippy(el, config); 
