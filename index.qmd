@@ -146,7 +146,7 @@ $$d\left(x,y\right) = \sqrt{\sum_{t=1}^{T}\left(x_t-y_t\right)^2} =
 
 > This property is very useful in finance, for example, we may wish to build a long-only portfolio where holdings in negative-correlated securities can only offset risk and therefore should be treated as different for diversification purposes.
 
-## An Alternative Correlation-Based Distance Metric{.small}
+## An Alternative Correlation-Based Distance Metric {.small}
 
 ::: columns
 ::: column
@@ -187,7 +187,6 @@ $$d_{|p|} = \sqrt{1 - | \rho(X,Y) |}$$
 1.  Firstly, it quantifies the linear codependency between two random variables, but neglects nonlinear relationships.
 2.  Secondly, correlation is highly influenced by outliers.
 3.  Finally, its application beyond the multivariate normal case is questionable.
-    
 
 ## Entropy and the challenge of measuring accuracy
 
@@ -242,7 +241,7 @@ p <- c(0.01,0.99)
 ## Entropy and forecasting complexity {.small}
 
 -   Similarly, if we add another kind of event to the distribution,forecasting into winter, so also predicting snow, entropy tends to increase, due the added dimensionality of the prediction problem.
--   Similarly, if we add another kind of event to the distribution, <span class="blue">forecasting into winter, so also predicting snow,</span> entropy tends to increase, due the added dimensionality of the prediction problem.
+-   Similarly, if we add another kind of event to the distribution, [forecasting into winter, so also predicting snow,]{.blue} entropy tends to increase, due the added dimensionality of the prediction problem.
 
 ```{r}
 #| echo: true
@@ -355,6 +354,7 @@ print(paste("Joint entropy (in bits):", joint_entropy_bits))
     -   Identifies the least presumptive probability distributions based on known information, central to Bayesian inference and machine learning.
 
 ## Understanding Entropy in Finance {.small}
+
 #### Divergence and Its Financial Significance
 
 -   **Kullback-Leibler (KL) Divergence:**
@@ -362,15 +362,13 @@ print(paste("Joint entropy (in bits):", joint_entropy_bits))
     -   Measures the extra uncertainty induced when using distribution (q) to approximate (p), crucial for assessing model accuracy.
 -   **Cross-Entropy:**
     -   Formula: (H_c(p, q) = -\sum\_{x\in S_X}p(x) \log(q(x)))
-    -   Highlights the discrepancy between the true distribution ((p)) and the predicted one ((q)), essential for evaluating classification models in finance.
-## Understanding Entropy in Finance {.small}
-#### Mutual Information and Strategic Insights 
-
+    -   Highlights the discrepancy between the true distribution ((p)) and the predicted one ((q)), essential for evaluating classification models in finance. \## Understanding Entropy in Finance {.small} \#### Mutual Information and Strategic Insights
 -   **Mutual Information:**
     -   Formula: (I(X;Y) = H(X) - H(X\|Y) = H(X) + H(Y) - H(X,Y))
     -   Quantifies the informational gain in variable (X) from knowing (Y), demonstrating the value of shared information between financial variables for strategic decision-making.
 
 ## Understanding Entropy in Finance {.small}
+
 #### Implications for Financial Machine Learning
 
 -   **Model Selection and Evaluation:** Theoretical concepts like divergence and cross-entropy help in selecting and evaluating models based on their fidelity to true market behaviors and predictive capabilities.
@@ -468,14 +466,14 @@ print(paste("Mutual Information between AAPL and MSFT:", mutual_info))
 
 -   **Complexity:** Understanding and applying VI can be complex, requiring a solid foundation in information theory.
 
--  **Interpretation:** Interpreting the results of VI analysis in the context of financial decision-making can be challenging.
+-   **Interpretation:** Interpreting the results of VI analysis in the context of financial decision-making can be challenging.
 :::
 :::
 
 ## TL;DR {.small}
 
 | Metric                                | Definition                                                                                                                  | Relationship                                                                       | Applications in Finance                                                                           | Metric Properties                                                                                                                                     |
-|---------------|---------------|---------------|---------------|---------------|
+|---------------------------------------|-----------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Entropy (H)                           | Measures the uncertainty or unpredictability of a variable's outcome.                                                       | Fundamental to all other metrics as a measure of uncertainty.                      | Quantifying the unpredictability of financial variables such as asset returns, market volatility. | **No**, entropy is not a distance measure and does not satisfy metric properties.                                                                     |
 | Mutual Information (I)                | Measures the amount of information shared between two variables; how much knowing one reduces uncertainty about the other.  | Relates to entropy by quantifying the reduction in uncertainty.                    | Analyzing dependencies between financial variables, identifying market trends.                    | **No**, mutual information is not a distance measure; it lacks symmetry and the triangle inequality for distances.                                    |
 | Conditional Entropy (H(X\|Y))         | Quantifies the remaining uncertainty in one variable when the state of another is known.                                    | Derived from entropy, showing the reduction in uncertainty given another variable. | Assessing predictability of financial variables given others.                                     | **No**, conditional entropy is directional and does not satisfy symmetry or the triangle inequality.                                                  |
@@ -485,8 +483,8 @@ print(paste("Mutual Information between AAPL and MSFT:", mutual_info))
 
 ## Experimental evidence {.small}
 
-- To calculate the Variation of Information (VI) in R and compare it with linear correlation, especially emphasizing the differences in detecting non-linear relationships, we'll first simulate data to create an exaggerated non-linear relationship. 
-- Then, we'll calculate both the Pearson correlation coefficient (a measure of linear correlation) and the Variation of Information.
+-   To calculate the Variation of Information (VI) in R and compare it with linear correlation, especially emphasizing the differences in detecting non-linear relationships, we'll first simulate data to create an exaggerated non-linear relationship.
+-   Then, we'll calculate both the Pearson correlation coefficient (a measure of linear correlation) and the Variation of Information.
 
 ## Experimental evidence {.small}
 
@@ -510,10 +508,9 @@ print(paste("Linear Correlation:", linear_correlation))
 
 ## Calculating Variation of Information in R {.small}
 
-- Calculating the Variation of Information (VI) in R for continuous variables directly is not as straightforward because it typically requires the variables to be discretized or involves estimating their joint and individual entropies. 
+-   Calculating the Variation of Information (VI) in R for continuous variables directly is not as straightforward because it typically requires the variables to be discretized or involves estimating their joint and individual entropies.
 
-- Since there's no built-in function for VI in base R or common packages, we'll need to implement it. This involves discretizing the data, calculating the entropies, and then using the VI formula.
-
+-   Since there's no built-in function for VI in base R or common packages, we'll need to implement it. This involves discretizing the data, calculating the entropies, and then using the VI formula.
 
 ## Calculating Variation of Information in R {.small}
 
@@ -561,6 +558,7 @@ print(paste("Linear Correlation:", linear_correlation))
 
 ::: columns
 :::
+
 -   Let's continue from the previous example, assuming `H_x`, `H_y`, and `I_xy` (mutual information) have already been calculated:
 
 ```{r}
@@ -577,15 +575,11 @@ print(paste("Variation of Information:", VI))
 print(paste("Normalized Variation of Information:", Normalized_VI))
 ```
 
-::: 
-::: column
-#### Interpretation 
-- **Variation of Information (VI):** Provides a measure of the total unique and shared information between two variables. A lower value indicates more shared information, while a higher value indicates less shared information and more uniqueness. 
+::: ::: column \#### Interpretation - **Variation of Information (VI):** Provides a measure of the total unique and shared information between two variables. A lower value indicates more shared information, while a higher value indicates less shared information and more uniqueness.
 
-- **Normalized Variation of Information:** Adjusts VI into a 0 to 1 scale, where 0 indicates perfect agreement (identical information content) and 1 indicates complete disagreement (no shared information). This normalization makes it easier to interpret the degree of dissimilarity between the variables. ::: :::
+-   **Normalized Variation of Information:** Adjusts VI into a 0 to 1 scale, where 0 indicates perfect agreement (identical information content) and 1 indicates complete disagreement (no shared information). This normalization makes it easier to interpret the degree of dissimilarity between the variables. ::: :::
 
-:::
-:::
+::: :::
 
 ## Practical Advice {.small}
 
@@ -700,8 +694,11 @@ final_long_df %>%
 -   Correlations are useful at quantifying the linear codependency between random variables.
 
 -   However,when variables X and Y are bound by a nonlinear relationship, the above distance metric misjudges the similarity of these variables.
+
 -   For non-linear cases, @Lopez2020 argues the normalized mutual information is a more appropriate distance metric.
+
     -   It allows us to answer questions regarding the unique information contributed by a random variable, without having to make functional assumptions.
+
 -   Given that many ML algorithms do not impose a functional form on the data, it makes sense to use them in conjunction with entropy-based features.
 
 ## Further reading
